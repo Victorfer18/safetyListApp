@@ -1,19 +1,13 @@
-import React from 'react';
-
-import { ImageBackground } from 'react-native';
 
 import { Stack } from 'expo-router';
 
-export default function Layout() {
+
+const StackLayout = () => {
     return (
-        <Stack
-            screenOptions={{
-                headerShown: false,
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                },
-            }}
-        />
+        <Stack>
+            <Stack.Screen name="(stack)" options={{headerShown: false}} />
+        </Stack>
     );
 }
+
+export default StackLayout;
