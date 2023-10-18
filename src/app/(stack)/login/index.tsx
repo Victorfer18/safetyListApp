@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 const image = 'assets/images/login/background.png';
 const logoImage1 = 'assets/images/logo/safety-list.png';
@@ -42,6 +43,7 @@ const App = () => {
 
                 </View>
             </ImageBackground>
+            <StatusBar style="light" />
         </View>
     );
 };

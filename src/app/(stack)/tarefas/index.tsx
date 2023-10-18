@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-nati
 import { MaterialCommunityIcons, AntDesign  } from '@expo/vector-icons';
 
 import Button from 'components/Button'
+import { StatusBar } from "expo-status-bar";
 
 const tarefas = () => {
     return (
@@ -26,7 +27,7 @@ const tarefas = () => {
                 </Button>
                 </View>
             </ScrollView>
-
+            <StatusBar style="dark" />
         </View>
     )
 }

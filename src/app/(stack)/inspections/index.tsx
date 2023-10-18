@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Button from '../../../components/Button';
 import Card from "../../../components/Card";
+import { StatusBar } from "expo-status-bar";
 
 const inspections = () => {
     return (
@@ -20,7 +21,7 @@ const inspections = () => {
                 </Card>
             ))}
             </ScrollView>
-
+            <StatusBar style="dark" />
         </View>
     )
 }

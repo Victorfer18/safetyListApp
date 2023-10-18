@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { StatusBar } from 'expo-status-bar';
+
 
 const data = [
   { label: 'Item 1', value: '1', image: require('assets/images/unidades/1.png') },
@@ -92,6 +94,7 @@ const DropdownComponent = () => {
       <TouchableOpacity style={styles.customButton} onPress={handleNavigation}>
         <Text style={styles.buttonText}>Prosseguir</Text>
       </TouchableOpacity>
+      <StatusBar style='light' />
     </View>
   );
 };
