@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
+
+import { login } from 'services/api';
 
 const image = 'assets/images/login/background.png';
 const logoImage1 = 'assets/images/logo/safety-list.png';
@@ -10,6 +14,28 @@ const logoImage2 = 'assets/images/logo/safety-2u.png';
 const App = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const handleLogin = async () => {
+        try {
+
+
+            const response = await login(username, password);
+
+            if (response.success && response.payload) {
+                console.log("Login efetuado com sucesso!", response.message);
+
+                await AsyncStorage.setItem('userToken', response.payload);
+
+                router.replace({ pathname: '/(stack)/unidades/' });
+
+            } else {
+                console.log("Falha ao fazer login. Por favor, verifique suas credenciais.");
+            }
+        } catch (error) {
+            console.error("Erro durante o login:", error.message);
+        }
+    };
+
 
     return (
         <View style={styles.container}>
@@ -35,9 +61,7 @@ const App = () => {
                         secureTextEntry={true}
                         placeholderTextColor="#aaa"
                     />
-                    <TouchableOpacity style={styles.customButton} onPress={() => {
-                        console.log("Usuário:", username, "Senha:", password);
-                    }}>
+                    <TouchableOpacity style={styles.customButton} onPress={handleLogin}>
                         <Text style={styles.buttonText}>Entrar</Text>
                     </TouchableOpacity>
 

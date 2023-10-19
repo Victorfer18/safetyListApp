@@ -94,7 +94,7 @@ const DropdownComponent = () => {
       <TouchableOpacity style={styles.customButton} onPress={handleNavigation}>
         <Text style={styles.buttonText}>Prosseguir</Text>
       </TouchableOpacity>
-      <StatusBar style='light' />
+      <StatusBar style='dark' />
     </View>
   );
 };
