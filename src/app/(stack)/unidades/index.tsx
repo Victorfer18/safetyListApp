@@ -1,27 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { StatusBar } from 'expo-status-bar';
+import { getClientsById } from 'services/api';
+import Button from 'components/Button';
+import { MaterialIcons } from '@expo/vector-icons';;
 
 
-const data = [
-  { label: 'Item 1', value: '1', image: require('assets/images/unidades/1.png') },
-  { label: 'Item 2', value: '2', image: require('assets/images/unidades/2.png') },
-  { label: 'Item 3', value: '3', image: require('assets/images/unidades/3.png') },
-  { label: 'Item 11', value: '11', image: require('assets/images/unidades/11.png') },
-  { label: 'Item 13', value: '13', image: require('assets/images/unidades/13.png') },
-  { label: 'Item 15', value: '15', image: require('assets/images/unidades/15.png') },
-  { label: 'Item 16', value: '16', image: require('assets/images/unidades/16.png') },
-  { label: 'Item 17', value: '17', image: require('assets/images/unidades/17.png') },
 
+const fotos = [
+  { value: '1', image: require('assets/images/unidades/1.png') },
+  { value: '2', image: require('assets/images/unidades/2.png') },
+  { value: '3', image: require('assets/images/unidades/3.png') },
+  { value: '11', image: require('assets/images/unidades/11.png') },
+  { value: '13', image: require('assets/images/unidades/13.png') },
+  { value: '15', image: require('assets/images/unidades/15.png') },
+  { value: '16', image: require('assets/images/unidades/16.png') },
+  { value: '17', image: require('assets/images/unidades/17.png') },
+  { value: '18', image: require('assets/images/unidades/18.png') },
+  { value: '20', image: require('assets/images/unidades/20.png') },
+  { value: '22', image: require('assets/images/unidades/22.png') },
+  { value: '23', image: require('assets/images/unidades/23.png') },
+  { value: '24', image: require('assets/images/unidades/24.png') },
+  { value: '26', image: require('assets/images/unidades/26.png') },
+  { value: '27', image: require('assets/images/unidades/27.png') },
+  { value: '28', image: require('assets/images/unidades/28.png') },
 ];
 const defaultImage = require('assets/images/unidades/default.png');
 
 const DropdownComponent = () => {
+
   const [value, setValue] = useState(null);
+  const [data, setData] = useState([]);
   const [selectedImage, setSelectedImage] = useState(defaultImage);
   const [isFocus, setIsFocus] = useState(false);
+
+  useEffect(() => {
+    getClientsById(7).then(res => {
+      setData(res.payload.map(e => ({ label: e.info_name, value: e.client_id, image: require('assets/images/unidades/1.png') })));
+    })
+  }, []);
 
   const selectedItem = data.find(item => item.value === value);
   const labelText = selectedItem ? selectedItem.label : "Unidades";
@@ -35,26 +54,8 @@ const DropdownComponent = () => {
     }
     return null;
   };
-  const handleNavigation = () => {
-    if (value) {
-      const selectedItem = data.find(item => item.value === value);
-      if (selectedItem) {
-        // Aqui, você pode decidir para qual tela navegar com base no item selecionado
-        // Por exemplo:
-        switch (selectedItem.value) {
-          case '1':
-            console.log({ labelText });
-            break;
-          case '2':
-            console.log({ labelText });
-            break;
-          // ... adicione mais casos conforme necessário
-          default:
-            break;
-        }
-      }
-    }
-  };
+
+
 
 
   return (
@@ -79,7 +80,7 @@ const DropdownComponent = () => {
         onBlur={() => setIsFocus(false)}
         onChange={item => {
           setValue(item.value);
-          setSelectedImage(item.image || defaultImage);
+          setSelectedImage(fotos.find(i => i.value == item.value)?.image || defaultImage);
           setIsFocus(false);
         }}
         renderLeftIcon={() => (
@@ -91,9 +92,9 @@ const DropdownComponent = () => {
           />
         )}
       />
-      <TouchableOpacity style={styles.customButton} onPress={handleNavigation}>
-        <Text style={styles.buttonText}>Prosseguir</Text>
-      </TouchableOpacity>
+      <Button texto='Proseguir' line={16} marginTop={16} href={'/(stack)/inspections/'+value}>
+        <MaterialIcons name="navigate-next" size={16} color="white" />
+      </Button>
       <StatusBar style='dark' />
     </View>
   );

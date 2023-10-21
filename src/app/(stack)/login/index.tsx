@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Image, ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
@@ -15,6 +15,15 @@ const App = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    useEffect(() => {
+        (async () => {
+            const token = await AsyncStorage.getItem('userToken');
+            if (token){
+               // router.replace({ pathname: '/(stack)/unidades' });
+            }
+        })()
+
+    }, []);
     const handleLogin = async () => {
         try {
 
@@ -29,10 +38,14 @@ const App = () => {
                 router.replace({ pathname: '/(stack)/unidades/' });
 
             } else {
-                console.log("Falha ao fazer login. Por favor, verifique suas credenciais.");
+                Alert.alert(
+                    "Erro de Login",
+                    "Houve um problema com suas credenciais. Por favor, tente novamente."
+                );
             }
         } catch (error) {
-            console.error("Erro durante o login:", error.message);
+            //console.error("Erro durante o login:", error.message);
+            Alert.alert("Erro", "Ocorreu um erro durante o login. Por favor, tente novamente.");
         }
     };
 
