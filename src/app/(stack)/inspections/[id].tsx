@@ -6,8 +6,8 @@ import { useSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { getInspectionsByClient } from 'services/api';
 
-function formData(data:String){
-    return data?.substr(0,10).split('-').reverse().join('/')
+function formData(data: String) {
+    return data?.substr(0, 10).split('-').reverse().join('/')
 }
 
 
@@ -18,7 +18,7 @@ const inspections = () => {
         (async () => {
             const res = await getInspectionsByClient(id)
             setLista(res.payload)
-            console.log(res.payload)
+
         })()
     }, [])
 
@@ -35,7 +35,7 @@ const inspections = () => {
                         <Text style={style.paragrafo}>Criado em: {formData(e.date_created)}</Text>
                         <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
                         <Text style={style.paragrafo}>Status: {e.status_inspection_desc}</Text>
-                        <Button texto='Inspecionar' />
+                        <Button texto='Inspecionar' href={'/(stack)/tarefas/'} />
                     </Card>
                 ))}
             </ScrollView>

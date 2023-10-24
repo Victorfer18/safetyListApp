@@ -1,10 +1,25 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { MaterialCommunityIcons, AntDesign  } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { useEffect, useState } from "react";
+import { getInspectableList } from 'services/api';
 
 import Button from 'components/Button'
 import { StatusBar } from "expo-status-bar";
 
 const tarefas = () => {
+
+    const inspection_id = 1
+    const client_id = 1
+    const [lista, setLista] = useState([])
+    useEffect(() => {
+        (async () => {
+            const res = await getInspectableList(inspection_id, client_id);
+            console.log(res)
+            setLista(res.payload)
+
+        })()
+    }, [])
+
     return (
         <View>
             <ScrollView>
@@ -14,7 +29,7 @@ const tarefas = () => {
                 <View style={style.grid}>
                     {Array(12).fill('').map((_, i) => (
                         <TouchableOpacity style={style.task}>
-                            <MaterialCommunityIcons name="fire-hydrant" size={100} color="white" style={style.icon}/>
+                            <MaterialCommunityIcons name="fire-hydrant" size={100} color="white" style={style.icon} />
                             <Text style={style.taskText}>
                                 Hidrante
                             </Text>
@@ -22,9 +37,9 @@ const tarefas = () => {
                     ))}
                 </View>
                 <View style={style.boxSpace}>
-                <Button texto='Finalizar Tarefas' cor='#16be2e' line={20}>
-                <AntDesign name="checkcircleo" size={16} color="white" />
-                </Button>
+                    <Button texto='Finalizar Tarefas' cor='#16be2e' line={20}>
+                        <AntDesign name="checkcircleo" size={16} color="white" />
+                    </Button>
                 </View>
             </ScrollView>
             <StatusBar style="dark" />
@@ -61,14 +76,14 @@ const style = StyleSheet.create(
             shadowRadius: 3.84,
             elevation: 5,
         },
-        taskText:{
+        taskText: {
             borderBottomLeftRadius: 18,
             borderBottomRightRadius: 18,
             color: '#f7f7f7',
             fontSize: 16,
             textAlign: "center",
             backgroundColor: '#0002',
-            padding:12,
+            padding: 12,
         },
         tituloPage: {
             fontSize: 34,
@@ -81,10 +96,10 @@ const style = StyleSheet.create(
         icon: {
             textAlign: 'center',
             padding: 18,
-        
+
         },
-            boxSpace:{
-                margin: 18,
-            }
+        boxSpace: {
+            margin: 18,
+        }
     }
 )

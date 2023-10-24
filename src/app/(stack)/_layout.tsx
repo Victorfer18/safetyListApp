@@ -8,7 +8,11 @@ const HeaderTitle = () => {
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <Image
         source={require('assets/images/logo/safety-list.png')}
-        style={{ width: '80%', height: 45, marginRight: 0 }}
+        style={{ width: '40%', height: 45, marginRight: 0 }}
+      />
+      <Image
+        source={{uri:'https://safetylist.safety2u.com.br/public/clients/getLogoInspectable/7'}}
+        style={{ width: '40%', height: 45, marginRight: 0 }}
       />
     </View>
   );

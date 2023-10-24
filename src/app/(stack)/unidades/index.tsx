@@ -5,7 +5,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { StatusBar } from 'expo-status-bar';
 import { getClientsById } from 'services/api';
 import Button from 'components/Button';
-import { MaterialIcons } from '@expo/vector-icons';;
+import { MaterialIcons } from '@expo/vector-icons';
+import jwt from '@/services/jwt';
 
 
 
@@ -37,9 +38,14 @@ const DropdownComponent = () => {
   const [isFocus, setIsFocus] = useState(false);
 
   useEffect(() => {
-    getClientsById(7).then(res => {
-      setData(res.payload.map(e => ({ label: e.info_name, value: e.client_id, image: require('assets/images/unidades/1.png') })));
-    })
+    (async () => {
+      const data = await jwt()
+
+      getClientsById(data.client_id).then(res => {
+        setData(res.payload.map(e => ({ label: e.info_name, value: e.client_id, image: require('assets/images/unidades/1.png') })));
+      })
+    })()
+
   }, []);
 
   const selectedItem = data.find(item => item.value === value);
@@ -92,7 +98,7 @@ const DropdownComponent = () => {
           />
         )}
       />
-      <Button texto='Proseguir' line={16} marginTop={16} href={'/(stack)/inspections/'+value}>
+      <Button texto='Proseguir' line={16} marginTop={16} href={'/(stack)/inspections/' + value}>
         <MaterialIcons name="navigate-next" size={16} color="white" />
       </Button>
       <StatusBar style='dark' />

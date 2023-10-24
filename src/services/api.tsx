@@ -37,6 +37,31 @@ export const getInspectionsByClient = async (clientId: number) => {
 	}
 };
 
+export const getInspectableList = async (inspection_id: number, client_id: number) => {
+	await setAuthToken();
+
+	try {
+
+		const body = {
+			inspection_id,
+			client_id
+		};
+		const parametrosJSON = JSON.stringify(body);
+		const response = await axiosInstance.get('/inspections/getInspectableList', {
+			params: parametrosJSON,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		console.log(response.data)
+		return response.data;
+
+	} catch (error) {
+		throw new Error('Erro ao obter inspecoes por cliente');
+	}
+};
+
+
 export const saveInspectableIsClosed = async (
 	clientId: number,
 	inspectionId: number,
