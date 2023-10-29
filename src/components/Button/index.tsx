@@ -1,9 +1,13 @@
-import { Link } from "expo-router";
-import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, TouchableOpacity, TouchableOpacityProps, Text } from "react-native";
+import { forwardRef } from "react";
 
+type Props = TouchableOpacityProps
 
-const Button = ({ texto, href = '', cor = '#be1622', children, line = 10, width = '100%',
-    marginTop = 20, marginLeft = 0, fn = () => false }: any) => {
+const Button = forwardRef<TouchableOpacity, Props>(({
+    texto, cor = '#be1622', children, line = 10, width = '100%',
+    marginTop = 20, marginLeft = 0, fn = () => false,
+    ...rest
+}: any, ref) => {
     const styles = StyleSheet.create({
         customButton: {
             marginTop,
@@ -25,13 +29,16 @@ const Button = ({ texto, href = '', cor = '#be1622', children, line = 10, width 
         },
     });
     return (
-        <TouchableOpacity style={styles.customButton} onPress={fn}>
-            <Link href={href} asChild>
-                <Text style={styles.buttonText}>{children} {texto}</Text>
-            </Link>
+        <TouchableOpacity ref={ref}
+            style={styles.customButton} onPress={fn}
+            {...rest}
+        >
+
+            <Text style={styles.buttonText}>{children} {texto}</Text>
+
         </TouchableOpacity>
     )
-}
+})
 
 export default Button;
 

@@ -1,18 +1,18 @@
-import { Stack, Tabs } from "expo-router";
+import { Stack } from "expo-router";
 
 import React from 'react';
 import { Image, View } from 'react-native';
 
 const HeaderTitle = () => {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
       <Image
         source={require('assets/images/logo/safety-list.png')}
-        style={{ width: '40%', height: 45, marginRight: 0 }}
+        style={{ width: '25%', height: 25, marginLeft: 16, marginRight: 16 }}
       />
       <Image
         source={{uri:'https://safetylist.safety2u.com.br/public/clients/getLogoInspectable/7'}}
-        style={{ width: '40%', height: 45, marginRight: 0 }}
+        style={{ width: '25%', height: 45 }}
       />
     </View>
   );

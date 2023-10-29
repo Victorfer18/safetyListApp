@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { getInspectionsByClient } from 'services/api';
+import { Link } from "expo-router";
 
 function formData(data: String) {
     return data?.substr(0, 10).split('-').reverse().join('/')
@@ -35,7 +36,12 @@ const inspections = () => {
                         <Text style={style.paragrafo}>Criado em: {formData(e.date_created)}</Text>
                         <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
                         <Text style={style.paragrafo}>Status: {e.status_inspection_desc}</Text>
-                        <Button texto='Inspecionar' href={'/(stack)/tarefas/'} />
+                        <Link href={{
+                            pathname: '/(stack)/tarefas/',
+                            params: { client_id: e.client_id, inspection_id: e.inspection_id }
+                        }} asChild>
+                            <Button texto='Inspecionar' />
+                        </Link>
                     </Card>
                 ))}
             </ScrollView>

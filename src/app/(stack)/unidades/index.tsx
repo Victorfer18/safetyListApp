@@ -7,6 +7,7 @@ import { getClientsById } from 'services/api';
 import Button from 'components/Button';
 import { MaterialIcons } from '@expo/vector-icons';
 import jwt from '@/services/jwt';
+import { Link } from 'expo-router';
 
 
 
@@ -98,9 +99,11 @@ const DropdownComponent = () => {
           />
         )}
       />
-      <Button texto='Proseguir' line={16} marginTop={16} href={'/(stack)/inspections/' + value}>
-        <MaterialIcons name="navigate-next" size={16} color="white" />
-      </Button>
+      <Link href={'/(stack)/inspections/' + value} asChild>
+        <Button texto='Proseguir' line={16} marginTop={16} >
+          <MaterialIcons name="navigate-next" size={16} color="white" />
+        </Button>
+      </Link>
       <StatusBar style='dark' />
     </View>
   );
@@ -110,23 +113,23 @@ export default DropdownComponent;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f9f9f9', // Um fundo claro
+    backgroundColor: '#f9f9f9',
     padding: 20,
     paddingTop: 0,
     flex: 1,
     justifyContent: 'center',
-    margin: 20, // Espaço em torno da moldura
-    borderRadius: 10, // Bordas arredondadas
-    borderWidth: 1, // Largura da borda
-    borderColor: '#d1d1d1', // Cor da borda
-    shadowColor: "#000", // Sombra
+    margin: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#d1d1d1',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5, // Elevação para Android
+    elevation: 5,
 
   },
   dropdown: {
@@ -144,8 +147,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     padding: 10,
     fontSize: 18,
-    textAlign: 'center', // Centraliza o texto
-    width: '100%', // Ocupa toda a largura
+    textAlign: 'center',
+    width: '100%',
   },
   placeholderStyle: {
     fontSize: 16,
@@ -161,14 +164,6 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  // image: {
-  //   width: 300,
-  //   height: 300,
-  //   marginBottom: 20,
-  //   alignSelf: 'center',
-  //   marginTop: -120, // Ajuste este valor conforme necessário
-  // },
-
   image: {
     maxWidth: Dimensions.get('window').width - 100, // 20 de margem em cada lado
     maxHeight: (Dimensions.get('window').height / 2) - 100, // Supondo que você queira que a imagem ocupe no máximo metade da altura da tela

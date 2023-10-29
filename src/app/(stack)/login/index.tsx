@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Image, ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+import CustomInput from '@/components/CustomInput';
+
 
 import { login } from 'services/api';
 
@@ -14,12 +16,14 @@ const logoImage2 = 'assets/images/logo/safety-2u.png';
 const App = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const passwordInputRef = useRef<TextInput>(null);
+
 
     useEffect(() => {
         (async () => {
             const token = await AsyncStorage.getItem('userToken');
-            if (token){
-               // router.replace({ pathname: '/(stack)/unidades' });
+            if (token) {
+                // router.replace({ pathname: '/(stack)/unidades' });
             }
         })()
 
@@ -59,20 +63,23 @@ const App = () => {
                         <Text style={styles.poweredByText}>Powered by</Text>
                         <Image source={require(logoImage2)} style={styles.logo2} />
                     </View>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={setUsername}
+                    <CustomInput
                         value={username}
+                        onChangeText={setUsername}
                         placeholder="Usuário"
-                        placeholderTextColor="#aaa"
+                        iconName="user"
+                        returnKeyType="next"
+                        onSubmitEditing={() => passwordInputRef.current?.focus()}
+                        blurOnSubmit={false}
                     />
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={setPassword}
+                    <CustomInput
+                        ref={passwordInputRef}
                         value={password}
+                        onChangeText={setPassword}
                         placeholder="Senha"
                         secureTextEntry={true}
-                        placeholderTextColor="#aaa"
+                        iconName="lock"
+                        returnKeyType="done"
                     />
                     <TouchableOpacity style={styles.customButton} onPress={handleLogin}>
                         <Text style={styles.buttonText}>Entrar</Text>

@@ -39,28 +39,18 @@ export const getInspectionsByClient = async (clientId: number) => {
 
 export const getInspectableList = async (inspection_id: number, client_id: number) => {
 	await setAuthToken();
-
 	try {
-
 		const body = {
 			inspection_id,
 			client_id
 		};
-		const parametrosJSON = JSON.stringify(body);
-		const response = await axiosInstance.get('/inspections/getInspectableList', {
-			params: parametrosJSON,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		console.log(response.data)
+		const response = await axiosInstance.post('/inspections/getInspectableList', body
+		);
 		return response.data;
-
 	} catch (error) {
 		throw new Error('Erro ao obter inspecoes por cliente');
 	}
 };
-
 
 export const saveInspectableIsClosed = async (
 	clientId: number,
@@ -104,6 +94,31 @@ export const getClientsById = async (clientId: number) => {
 		throw new Error('Erro ao obter clientes por ID');
 	}
 };
+
+export const validateJwt = async (clientId: number) => {
+	await setAuthToken();
+	try {
+		const response = await axiosInstance.get(`/validate_jwt`);
+		return response.data;
+	} catch (error) {
+		throw new Error('Erro ao obter validar JWT');
+	}
+};
+
+
+export const get_maintenance_type = async (system_type_id: number, client_id: number) => {
+	try {
+		const requestBody = {
+			system_type_id,
+			client_id
+		};
+		const response = await axiosInstance.post('/inspections/get_maintenance_type', requestBody);
+		return response.data;
+	} catch (error) {
+		throw new Error('Erro ao resgatar pergunta');
+	}
+};
+
 
 export const login = async (userEmail: string, userPassword: string) => {
 	try {

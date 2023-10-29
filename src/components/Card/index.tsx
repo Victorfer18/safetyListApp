@@ -1,12 +1,18 @@
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity, TouchableOpacityProps, Text } from "react-native";
+import { forwardRef } from "react";
 
-const Card = ({ children }: any) => {
+type Props = TouchableOpacityProps
+
+const Card = forwardRef<TouchableOpacity, Props>(({ children, ...rest }: any, ref) => {
+
+
     return (
-        <View style={styles.Box}>
+        <TouchableOpacity ref={ref}
+            style={styles.Box}>
             {children}
-        </View>
+        </TouchableOpacity>
     )
-}
+})
 
 export default Card;
 
