@@ -4,12 +4,19 @@ import Card from "../../../components/Card";
 import { StatusBar } from "expo-status-bar";
 import { useSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { getInspectionsByClient } from 'services/api';
+import { alterStatusInspectionById, getInspectionsByClient } from 'services/api';
 import { Link } from "expo-router";
 
 function formData(data: String) {
     return data?.substr(0, 10).split('-').reverse().join('/')
-}
+};
+
+function alterStatus(user_id, inspection_id, status_inspection) {
+    if (status_inspection == 1) {
+        alterStatusInspectionById(user_id, inspection_id, 2)
+    }
+
+};
 
 
 const inspections = () => {
@@ -31,6 +38,7 @@ const inspections = () => {
                 </Text>
 
                 {lista.map((e, i) => (
+
                     <Card key={i}>
                         <Text style={style.titulo}>{e.info_name}</Text>
                         <Text style={style.paragrafo}>Criado em: {formData(e.date_created)}</Text>
@@ -38,12 +46,17 @@ const inspections = () => {
                         <Text style={style.paragrafo}>Status: {e.status_inspection_desc}</Text>
                         <Link href={{
                             pathname: '/(stack)/tarefas/',
-                            params: { client_id: e.client_id, inspection_id: e.inspection_id }
+                            params: { client_id: e.client_id, inspection_id: e.inspection_id, client_parent: e.client_parent, user_id: e.user_id }
                         }} asChild>
-                            <Button texto='Inspecionar' />
+                            <Button texto='Inspecionar' onPress={() => {
+                                alterStatus(e.user_id, e.inspection_id, e.status_inspection)
+                            }} />
                         </Link>
                     </Card>
                 ))}
+                {
+                    lista.length == 0 && (<Text style={style.msgInspecoes}>Não há inspeções a serem realizadas para essa unidade!</Text>)
+                }
             </ScrollView>
             <StatusBar style="dark" />
         </View>
@@ -73,5 +86,15 @@ const style = StyleSheet.create({
         fontSize: 16,
         marginTop: 8,
     },
+    msgInspecoes: {
+        fontSize: 24,
+        padding: 16,
+        textAlign: "center",
+        backgroundColor: '#ccc',
+        color: '#555',
+        margin: 16,
+        borderRadius: 8,
+
+    }
 
 })

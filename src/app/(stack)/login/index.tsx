@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, Alert, TextInput } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
 import CustomInput from '@/components/CustomInput';
-
-
+import MessageDisplay from '@/components/feedBack';
+import { AntDesign } from '@expo/vector-icons';
 import { login } from 'services/api';
+import Button from '@/components/Button';
+import { router } from 'expo-router';
 
 const image = 'assets/images/login/background.png';
 const logoImage1 = 'assets/images/logo/safety-list.png';
@@ -16,52 +17,54 @@ const logoImage2 = 'assets/images/logo/safety-2u.png';
 const App = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [load, setLoad] = useState(false);
+    const [message, setMessage] = useState('');
     const passwordInputRef = useRef<TextInput>(null);
-
 
     useEffect(() => {
         (async () => {
             const token = await AsyncStorage.getItem('userToken');
             if (token) {
-                // router.replace({ pathname: '/(stack)/unidades' });
+                router.replace({ pathname: '/(stack)/unidades' });
             }
         })()
 
     }, []);
     const handleLogin = async () => {
-        try {
+        setLoad(true)
+        if (load == false) {
 
-
-            const response = await login(username, password);
-
-            if (response.success && response.payload) {
-                console.log("Login efetuado com sucesso!", response.message);
-
-                await AsyncStorage.setItem('userToken', response.payload);
-
-                router.replace({ pathname: '/(stack)/unidades/' });
-
-            } else {
-                Alert.alert(
-                    "Erro de Login",
-                    "Houve um problema com suas credenciais. Por favor, tente novamente."
-                );
+            try {
+                const response = await login(username, password);
+                if (response.success && response.payload) {
+                    await AsyncStorage.setItem('userToken', response.payload);
+                    router.replace({ pathname: '/(stack)/unidades' });
+                }
+            } catch (error) {
+                setMessage(error + '')
             }
-        } catch (error) {
-            //console.error("Erro durante o login:", error.message);
-            Alert.alert("Erro", "Ocorreu um erro durante o login. Por favor, tente novamente.");
         }
+        setTimeout(() => {
+            setLoad(false)
+            setTimeout(() => {
+                setMessage('')
+            }, 3000)
+        }, 2000);
     };
-
 
     return (
         <View style={styles.container}>
+
             <ImageBackground source={require(image)} style={styles.image}>
+
                 <View style={styles.loginBox}>
                     <Image source={require(logoImage1)} style={styles.logo1} />
+
                     <View style={styles.poweredByContainer}>
                         <Text style={styles.poweredByText}>Powered by</Text>
+
                         <Image source={require(logoImage2)} style={styles.logo2} />
+
                     </View>
                     <CustomInput
                         value={username}
@@ -78,13 +81,13 @@ const App = () => {
                         onChangeText={setPassword}
                         placeholder="Senha"
                         secureTextEntry={true}
-                        iconName="lock"
+                        iconName="unlock"
                         returnKeyType="done"
                     />
-                    <TouchableOpacity style={styles.customButton} onPress={handleLogin}>
-                        <Text style={styles.buttonText}>Entrar</Text>
-                    </TouchableOpacity>
-
+                    <Button texto='ACESSAR' width='100%' marginTop={0} line={16} onPress={handleLogin} load={load} >
+                        <AntDesign name={load ? "loading1" : "check"} size={16} color="white" />
+                    </Button>
+                    <MessageDisplay message={message} type={'success'} show={!!message} />
                 </View>
             </ImageBackground>
             <StatusBar style="light" />
@@ -105,8 +108,8 @@ const styles = StyleSheet.create({
     },
     loginBox: {
         width: '90%',
-        padding: 50,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        padding: 30,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         borderRadius: 10,
         alignItems: 'center',
     },
@@ -117,23 +120,24 @@ const styles = StyleSheet.create({
     poweredByContainer: {
         flexDirection: 'row',
         marginBottom: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%'
     },
     poweredByText: {
-        marginRight: 5,
+        marginRight: 0,
     },
     logo1: {
-        width: '90%',
-        height: 50,
+        width: '100%',
+        height: 60,
         marginBottom: 10,
-
+        objectFit: 'contain'
 
     },
-
     logo2: {
         width: '60%',
-        height: 20,
-        marginBottom: 10,
-
+        height: 25,
+        objectFit: 'contain'
     },
     input: {
         width: '100%',

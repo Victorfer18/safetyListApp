@@ -1,6 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+
 const getAuthToken = async () => {
 	try {
 		const token = await AsyncStorage.getItem('userToken');
@@ -71,14 +73,57 @@ export const saveInspectableIsClosed = async (
 	}
 };
 
-export const alterStatusInspectionById = async (inspectionId: number, status: number) => {
+export const register_maintenance = async (
+	system_type_id: any,
+	maintenance_type_id: any,
+	user_id: any,
+	client_parent: any,
+	consistency_status: any,
+	observation: any,
+	action: any,
+	imageUri: any
+) => {
+	await setAuthToken();
+	try {
+		const file = await fetch(imageUri);
+		const theBlob = await file.blob();
+		theBlob.lastModifiedDate = new Date();
+		theBlob.uri = imageUri
+		theBlob.name = 'teste.jpg'
+		theBlob.type = 'image/jpg'
+
+		const form = new FormData();
+		form.append('system_type_id', system_type_id);
+		form.append('maintenance_type_id', maintenance_type_id);
+		form.append('user_id', user_id);
+		form.append('client_parent', client_parent);
+		form.append('consistency_status', consistency_status);
+		form.append('observation', observation);
+		form.append('action', action);
+		form.append('image', theBlob._data.name);
+		const response = await axiosInstance.post('/inspections/register_maintenance', form, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+			transformRequest: d => d,
+		});
+		return response.data;
+
+	} catch (error) {
+		throw new Error(`Erro ao salvar Tarefa: ${error.message}`);
+	}
+
+};
+
+export const alterStatusInspectionById = async (user_id: number, inspectionId: number, status: number) => {
 	await setAuthToken();
 	try {
 		const requestBody = {
-			user_id: 82,
-			status_inspection: status
+			user_id: user_id,
+			status_inspection: status,
+			inspection_id: inspectionId
 		};
-		const response = await axiosInstance.put(`/inspections/alter_status/${inspectionId}`, requestBody);
+		const response = await axiosInstance.put(`/inspections/alter_status`, requestBody);
 		return response.data;
 	} catch (error) {
 		throw new Error('Erro ao alterar o status da inspecao por ID');
@@ -120,6 +165,7 @@ export const get_maintenance_type = async (system_type_id: number, client_id: nu
 };
 
 
+
 export const login = async (userEmail: string, userPassword: string) => {
 	try {
 		const requestBody = {
@@ -129,6 +175,6 @@ export const login = async (userEmail: string, userPassword: string) => {
 		const response = await axiosInstance.post('/login', requestBody);
 		return response.data;
 	} catch (error) {
-		throw new Error('Erro ao fazer login');
+		throw new Error(error.response.data.message);
 	}
 };

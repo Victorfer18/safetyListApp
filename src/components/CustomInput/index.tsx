@@ -1,13 +1,14 @@
 import React, { forwardRef, ForwardedRef } from 'react';
 import { TextInput, StyleSheet, TextInputProps, View } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { AntDesign } from '@expo/vector-icons';
+
 
 interface CustomInputProps extends TextInputProps {
     value: string;
     onChangeText: (text: string) => void;
     placeholder: string;
     secureTextEntry?: boolean;
-    iconName: string;
+    iconName?: string;
 }
 
 const CustomInput: React.ForwardRefRenderFunction<TextInput, CustomInputProps> = (
@@ -16,7 +17,7 @@ const CustomInput: React.ForwardRefRenderFunction<TextInput, CustomInputProps> =
 ) => {
     return (
         <View style={styles.container}>
-            <FontAwesome name={iconName} size={24} color="black" />
+            <AntDesign name={iconName || ''} size={24} color="#666" />
             <TextInput
                 {...props}
                 ref={ref}
@@ -35,9 +36,9 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: 'gray',
+        borderColor: '#ccc',
         borderWidth: 1,
-        margin: 10,
+        marginBottom: 16,
         paddingHorizontal: 10,
         borderRadius: 8,
         backgroundColor: '#fff',

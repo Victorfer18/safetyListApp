@@ -6,6 +6,8 @@ type Props = TouchableOpacityProps
 const Button = forwardRef<TouchableOpacity, Props>(({
     texto, cor = '#be1622', children, line = 10, width = '100%',
     marginTop = 20, marginLeft = 0, fn = () => false,
+    load = false,
+    active = true,
     ...rest
 }: any, ref) => {
     const styles = StyleSheet.create({
@@ -27,14 +29,37 @@ const Button = forwardRef<TouchableOpacity, Props>(({
             fontSize: 16,
             fontWeight: 'bold',
         },
+        disable: {
+            marginTop,
+            backgroundColor: "transparent",
+            borderBlockColor: "#CCC",
+            borderWidth: 1,
+            paddingVertical: line,
+            paddingHorizontal: 20,
+            borderRadius: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+            width,
+            marginLeft,
+        },
+        disabledTest: {
+            textTransform: "uppercase",
+            color: '#CCC',
+            fontSize: 16,
+            fontWeight: 'bold',
+        }
     });
+
+
+
+
     return (
         <TouchableOpacity ref={ref}
-            style={styles.customButton} onPress={fn}
+            style={active ? styles.customButton : styles.disable} onPress={fn}
             {...rest}
         >
 
-            <Text style={styles.buttonText}>{children} {texto}</Text>
+            <Text style={active ? styles.buttonText : styles.disabledTest}>{children} {load ? 'carregando...' : texto}</Text>
 
         </TouchableOpacity>
     )

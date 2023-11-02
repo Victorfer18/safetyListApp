@@ -1,26 +1,34 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
-import { getInspectableList } from 'services/api';
-import { useLocalSearchParams } from 'expo-router';
+import { getInspectableList, saveInspectableIsClosed, alterStatusInspectionById } from 'services/api';
+import { router, useLocalSearchParams } from 'expo-router';
 import CardTarefas from "@/components/CardTarefas";
 
 import Button from 'components/Button'
 import { StatusBar } from "expo-status-bar";
 
+
+
 const tarefas = () => {
 
     const local = useLocalSearchParams();
-
     const [lista, setLista] = useState([])
     useEffect(() => {
         (async () => {
 
             const res = await getInspectableList(local.inspection_id, local.client_id);
-            console.log(res)
+
             setLista(res.payload)
         })()
     }, [])
+
+    async function alterStatus() {
+        if (lista.every(m => m.is_closed == 1)) {
+            await alterStatusInspectionById(local.user_id, local.inspection_id, 3)
+            router.replace({ pathname: '/(stack)/inspections/' + local.inspection_id });
+        }
+    };
 
     return (
         <View>
@@ -28,11 +36,17 @@ const tarefas = () => {
                 <Text style={style.tituloPage}>
                     Tarefas
                 </Text>
+
                 <CardTarefas style={style} lista={lista} />
                 <View style={style.boxSpace}>
-                    <Button texto='Finalizar Tarefas' cor='#16be2e' line={20}>
-                        <AntDesign name="checkcircleo" size={16} color="white" />
-                    </Button>
+                    {
+                        lista.length == 0 && (<Text style={style.msgTarefas}>Não há tarefas a serem realizadas para essa inspeção!</Text>)
+                    }
+                    {
+                        lista.length > 0 && (<Button onPress={alterStatus} texto='Finalizar Tarefas' cor='#16be2e' line={20} active={lista.every(m => m.is_closed == 1)}>
+                            <AntDesign name="checkcircleo" size={16} color="white" />
+                        </Button>)
+                    }
                 </View>
             </ScrollView >
             <StatusBar style="dark" />
@@ -107,6 +121,16 @@ const style = StyleSheet.create(
         },
         boxSpace: {
             margin: 18,
+        },
+        msgTarefas: {
+            fontSize: 24,
+            padding: 16,
+            textAlign: "center",
+            backgroundColor: '#ccc',
+            color: '#555',
+            margin: 16,
+            borderRadius: 8,
+
         }
     }
 )

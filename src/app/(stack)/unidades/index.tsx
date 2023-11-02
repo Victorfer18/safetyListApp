@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity } from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  ImageBackground,
+  ScrollView
+} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { StatusBar } from 'expo-status-bar';
@@ -49,6 +58,22 @@ const DropdownComponent = () => {
 
   }, []);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const selectItem = (item) => {
+    setValue(item.value);
+    setSelectedImage(fotos.find(i => i.value == item.value)?.image || defaultImage);
+    setModalVisible(false);
+  };
+
   const selectedItem = data.find(item => item.value === value);
   const labelText = selectedItem ? selectedItem.label : "Unidades";
   const renderLabel = () => {
@@ -66,57 +91,72 @@ const DropdownComponent = () => {
 
 
   return (
-    <View style={styles.container}>
-      {selectedImage && <Image source={selectedImage} style={styles.image} />}
-      {renderLabel()}
-      <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
+    <ImageBackground source={selectedImage} style={styles.fundo}>
 
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={!isFocus ? 'Select item' : '...'}
-        searchPlaceholder="Search..."
-        value={value}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        onChange={item => {
-          setValue(item.value);
-          setSelectedImage(fotos.find(i => i.value == item.value)?.image || defaultImage);
-          setIsFocus(false);
-        }}
-        renderLeftIcon={() => (
-          <AntDesign
-            style={styles.icon}
-            color={isFocus ? 'blue' : 'black'}
-            name="Safety"
-            size={20}
-          />
+      <View style={styles.card}>
+        {renderLabel()}
+        <TouchableOpacity onPress={openModal} style={styles.dropdown}>
+          <Text>{selectedItem ? selectedItem.label : "Select item"}</Text>
+        </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+        >
+          <ScrollView>
+            {data.map((item) => (
+              <TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
+                <Text style={styles.item}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          <TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
+            <Text style={{ color: '#fff' }}>Fechar</Text>
+          </TouchableOpacity>
+        </Modal>
+
+        {!!value ? (
+          <Link href={'/(stack)/inspections/' + value} asChild>
+            <Button texto='Proseguir' line={16} marginTop={16} active={!!value}>
+              <MaterialIcons name="navigate-next" size={16} color="white" />
+            </Button>
+          </Link>
+
+        ) : (
+          <Button texto='Proseguir' line={16} marginTop={16} active={!!value}>
+            <MaterialIcons name="navigate-next" size={16} color="white" />
+          </Button>
         )}
-      />
-      <Link href={'/(stack)/inspections/' + value} asChild>
-        <Button texto='Proseguir' line={16} marginTop={16} >
-          <MaterialIcons name="navigate-next" size={16} color="white" />
-        </Button>
-      </Link>
-      <StatusBar style='dark' />
-    </View>
+        <StatusBar style='dark' />
+      </View>
+    </ImageBackground>
+
   );
 };
 
 export default DropdownComponent;
 
 const styles = StyleSheet.create({
-  container: {
+
+  fundo: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  item: {
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: '#eee',
+    borderRadius: 8,
+    marginLeft: 20,
+    marginRight: 20,
+    color: '#222'
+  },
+  card: {
     backgroundColor: '#f9f9f9',
     padding: 20,
     paddingTop: 0,
-    flex: 1,
     justifyContent: 'center',
     margin: 20,
     borderRadius: 10,
@@ -185,5 +225,17 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  modal: {
+    padding: 48,
+  },
+  closeModalButton: {
+    alignItems: 'center',
+    padding: 8,
+    margin: 16,
+    backgroundColor: '#be1622',
+    borderRadius: 8,
+
   },
 });
