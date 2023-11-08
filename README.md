@@ -1,1 +1,0 @@
-# safetyList_app
