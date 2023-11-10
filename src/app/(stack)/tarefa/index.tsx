@@ -1,132 +1,89 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, TextInput, Image, FlatList } from "react-native";
+import { Text, View, StyleSheet, Image, FlatList } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from '@expo/vector-icons';
 import Card from "@/components/Card";
 import Button from 'components/Button'
 import { Link, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
-import { get_maintenance_type, register_maintenance, saveInspectableIsClosed } from 'services/api';
+import { get_maintenance_type, get_maintenance, register_maintenance, saveInspectableIsClosed } from 'services/api';
 import CustomInput from '@/components/CustomInput';
 import jwt from "@/services/jwt";
+import FormTarefa from "@/components/FormTarefa";
+import MessageDisplay from "@/components/feedBack"
+
 
 const App = ({ ...params }: any) => {
+    const [lista, setLista] = useState([]);
+    const [resposta, setResposta] = useState([]);
+
+
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageText, setMessageText] = useState('');
+    const [messageType, setMessageType] = useState('error');
 
     const local = useLocalSearchParams();
-    const [lista, setLista] = useState([])
-    const [photoUri, setPhotoUri] = useState(null);
-    const [selectedRadio, setSelectedRadio] = useState(1)
-    const [inputValue1, setInputValue1] = useState('');
-    const [inputValue2, setInputValue2] = useState('');
-    const defaultImage = require('assets/images/tarefa/default.jpg');
-
-    useEffect(() => {
-        if (local?.photoUri !== photoUri) {
-            setPhotoUri(local?.photoUri);
-        }
-    }, [local?.photoUri]);
 
     useEffect(() => {
         (async () => {
             const res = await get_maintenance_type(local.system_type_id, local.client_id);
-            setLista(res.payload)
+            const res2 = await get_maintenance(local.system_id);
+            const margin = res.payload.map(e => {
+                let exist = res2.payload.find(i => e.maintenance_type_name == i.maintenance_type_name)
+                if (exist) {
+                    e = { ...exist, ...e }
+                }
+                return e
+            })
+            //console.log(margin)
+            //console.log(local.system_type_id, local.client_id)
+            //console.log(res2.payload)
+
+            setLista(margin)
+
+            setResposta(res2.payload)
         })()
     }, []);
 
-
     function final() {
         saveInspectableIsClosed(local.client_id, local.inspection_id, local.system_type_id)
+
+        setShowMessage(true);
+        setMessageText('Tarefas finalizadas com sucesso!');
+        setMessageType('success');
+
     }
 
-    async function saveTarefa(e: any) {
-        const dado = await jwt()
-
-        const res = await register_maintenance(
-            local.system_type_id,
-            e.maintenance_type_id,
-            local.user_id,
-            local.client_parent,
-            selectedRadio == 1,
-            inputValue1,
-            inputValue2,
-            local.photoUri
-        )
-    };
-    const renderCard = ({ item, index }) => (
-        <Card key={index}>
-            <Text style={styles.tituloCard}>
-                {item.maintenance_type_name}
-            </Text>
-            <View>
-                <Image source={photoUri ? { uri: photoUri } : defaultImage} alt={photoUri || ''} style={styles.imgDefault} />
-                <Link href={{
-                    pathname: '/(stack)/tarefa/camera',
-                    params: { system_type_id: local.system_type_id, client_id: local.client_id, client_parent: local.client_parent, user_id: local.user_id }
-                }} asChild >
-
-                    <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} >
-                        <AntDesign name="clouduploado" size={24} color="white" />
-                    </Button>
-                </Link>
-            </View>
-            <View style={styles.btnArea}>
-                <TouchableOpacity onPress={() => setSelectedRadio(1)}>
-                    <View style={styles.wrapper}>
-                        <View style={styles.radio}>
-                            {selectedRadio == 1 ? <View style={styles.radioBg}></View> : null}
-                        </View>
-                        <Text style={styles.radioText}>Consistente</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setSelectedRadio(2)}>
-                    <View style={styles.wrapper}>
-                        <View style={styles.radio}>
-                            {selectedRadio == 2 ? <View style={styles.radioBg}></View> : null}
-                        </View>
-                        <Text style={styles.radioText}>Inconsistente</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.container}>
-                <CustomInput
-                    placeholder="Observações"
-                    value={inputValue1}
-                    onChangeText={(text) => setInputValue1(text)}
-                />
-                {selectedRadio == 2 && (
-                    <CustomInput
-                        placeholder="Ações a serem tomadas"
-                        value={inputValue2}
-                        onChangeText={(text) => setInputValue2(text)}
-                    />
-                )}
-                <StatusBar style="dark" />
-            </View>
-            <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={() => saveTarefa(item)}>
-                <AntDesign name="checkcircleo" size={16} color="white" />
-            </Button>
-        </Card>
-
-    );
+    const render = ({ item, index }: any) => (<FormTarefa item={item} index={index} key={index} />)
 
     return (
-        <FlatList
-            data={lista}
-            renderItem={renderCard}
-            keyExtractor={(item, index) => index.toString()}
-            ListHeaderComponent={() => (
-                <Text style={styles.tituloPage}>
-                    Tarefa
-                </Text>
-            )}
-            ListFooterComponent={() => (<View style={{ margin: 16 }}>
-                <Button texto='Finalizar Tarefas' cor='#16be2e' line={20} active={false}>
-                    <AntDesign name="checkcircleo" size={16} color="white" />
-                </Button>
-            </View>
-            )
-            }
-        />
+
+        <>
+            <MessageDisplay message={messageText} type={messageType} show={showMessage} />
+
+
+            <FlatList
+                data={lista}
+                renderItem={render}
+                keyExtractor={(item, index) => index.toString()}
+                ListHeaderComponent={() => (
+                    <Text style={styles.tituloPage}>
+                        Tarefa
+                    </Text>
+                )}
+                ListFooterComponent={() => (<View style={{ margin: 16 }}>
+                    <Button texto='Finalizar Tarefas' cor='#16be2e' line={20} onPress={() => {
+                        if (!lista.every(e => e?.file_url)) {
+                            final()
+                        }
+                    }} active={lista.every(e => !e?.file_url)}>
+                        <AntDesign name="checkcircleo" size={16} color="white" />
+                    </Button>
+                </View>
+                )
+                }
+            />
+        </>
     );
 }
 

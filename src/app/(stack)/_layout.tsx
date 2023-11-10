@@ -23,7 +23,7 @@ const HeaderTitle = () => {
         style={{ flex: 1, height: 32, width: '30%', objectFit: "contain" }}
       />
       <View style={{ flex: 1, width: 32, height: 32 }}>
-        <TouchableOpacity onPress={handleLogin}>
+        <TouchableOpacity onLongPress={handleLogin}>
           <AntDesign name="logout" size={32} color="black" />
         </TouchableOpacity>
       </View>
@@ -35,11 +35,11 @@ export default () => {
   return (
     <Stack>
       <Stack.Screen name='login/index' options={{ headerShown: false }} />
-      <Stack.Screen name='inspections/[id]' options={{ headerShown: true, headerTitle: () => <HeaderTitle /> }} />
-      <Stack.Screen name='unidades/index' options={{ headerShown: true, headerTitle: () => <HeaderTitle /> }} />
-      <Stack.Screen name='tarefas/index' options={{ headerShown: true, headerTitle: () => <HeaderTitle /> }} />
-      <Stack.Screen name='tarefa/index' options={{ headerShown: true, headerTitle: () => <HeaderTitle /> }} />
-      <Stack.Screen name='tarefa/camera' options={{ headerShown: true, headerTitle: () => <HeaderTitle /> }} />
+      <Stack.Screen name='inspections/[id]' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
+      <Stack.Screen name='unidades/index' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
+      <Stack.Screen name='tarefas/index' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
+      <Stack.Screen name='tarefa/index' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
+      <Stack.Screen name='tarefa/camera' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
     </Stack>
   )
 }

@@ -164,7 +164,18 @@ export const get_maintenance_type = async (system_type_id: number, client_id: nu
 	}
 };
 
+export const get_maintenance = async (system_id: number) => {
 
+	try {
+		const requestBody = {
+			system_id,
+		};
+		const response = await axiosInstance.post('/inspections/get_maintenance', requestBody);
+		return response.data;
+	} catch (error) {
+		throw new Error('Erro ao resgatar pergunta');
+	}
+};
 
 export const login = async (userEmail: string, userPassword: string) => {
 	try {
