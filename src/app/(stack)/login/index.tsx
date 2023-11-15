@@ -32,24 +32,49 @@ const App = () => {
     }, []);
     const handleLogin = async () => {
         setLoad(true)
-        if (load == false) {
+        setMessage('');
 
-            try {
-                const response = await login(username, password);
-                if (response.success && response.payload) {
-                    await AsyncStorage.setItem('userToken', response.payload);
-                    router.replace({ pathname: '/(stack)/unidades' });
-                }
-            } catch (error) {
-                setMessage(error + '')
-            }
-        }
-        setTimeout(() => {
-            setLoad(false)
+        if (!username || !password) {
             setTimeout(() => {
-                setMessage('')
-            }, 3000)
-        }, 2000);
+                setMessage('Por favor, preencha todos os campos.');
+                setLoad(false);
+                setTimeout(() => {
+                    setMessage('')
+                }, 3000)
+            }, 2000);
+            return;
+        }
+
+        try {
+            const response = await login(username, password);
+            if (response.success && response.payload) {
+                await AsyncStorage.setItem('userToken', response.payload);
+                router.replace({ pathname: '/(stack)/unidades' });
+            } else {
+                setTimeout(() => {
+                    setMessage('Senha incorreta.');
+                    setLoad(false);
+                    setTimeout(() => {
+                        setMessage('')
+                    }, 3000)
+                }, 2000);
+            }
+        } catch (error) {
+            setTimeout(() => {
+                setMessage('Usuário não encontrado para o uso desta ferramenta.');
+                setLoad(false);
+                setTimeout(() => {
+                    setMessage('')
+                }, 3000)
+            }, 2000);
+        }
+
+        // setTimeout(() => {
+        //         setLoad(false)
+        //         setTimeout(() => {
+        //             setMessage('')
+        //         }, 3000)
+        //     }, 2000);
     };
 
     return (
@@ -87,7 +112,7 @@ const App = () => {
                     <Button texto='ACESSAR' width='100%' marginTop={0} line={16} onPress={handleLogin} load={load} >
                         <AntDesign name={load ? "loading1" : "check"} size={16} color="white" />
                     </Button>
-                    <MessageDisplay message={message} type={'success'} show={!!message} />
+                    <MessageDisplay message={message} type={'error'} show={!!message} />
                 </View>
             </ImageBackground>
             <StatusBar style="light" />
@@ -122,10 +147,14 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%'
+        width: '100%',
+
     },
     poweredByText: {
-        marginRight: 0,
+        color: '#6c6c6c',
+        fontSize: 14,
+        fontStyle: 'italic'
+
     },
     logo1: {
         width: '100%',
@@ -135,8 +164,8 @@ const styles = StyleSheet.create({
 
     },
     logo2: {
-        width: '60%',
-        height: 25,
+        width: '40%',
+        height: 15,
         objectFit: 'contain'
     },
     input: {

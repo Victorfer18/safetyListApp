@@ -10,7 +10,7 @@ import { get_maintenance_type, get_maintenance, register_maintenance, saveInspec
 import CustomInput from '@/components/CustomInput';
 import jwt from "@/services/jwt";
 import FormTarefa from "@/components/FormTarefa";
-import MessageDisplay from "@/components/feedBack"
+import MessageDisplay from "@/components/feedBack";
 
 
 const App = ({ ...params }: any) => {
@@ -35,9 +35,6 @@ const App = ({ ...params }: any) => {
                 }
                 return e
             })
-            //console.log(margin)
-            //console.log(local.system_type_id, local.client_id)
-            //console.log(res2.payload)
 
             setLista(margin)
 

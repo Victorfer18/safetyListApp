@@ -1,17 +1,43 @@
 import { Stack } from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React from 'react';
-import { Image, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, View, StyleSheet, Alert } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
-const handleLogin = async () => {
-  await AsyncStorage.removeItem('userToken');
-  router.replace({ pathname: '/(stack)/login' });
+const handleLogin = () => {
+  Alert.alert(
+    "Está de saída?",
+    "Confirme a sua saída do sistema.",
+    [
+      {
+        text: "Não",
+        onPress: () => console.log("Cancelado"),
+        style: "cancel"
+      },
+      {
+        text: "Sim", onPress: async () => {
+          await AsyncStorage.removeItem('userToken');
+          router.replace({ pathname: '/(stack)/login' });
+        }
+      }
+    ],
+    { cancelable: false }
+  );
 };
 
 const HeaderTitle = () => {
+  const [isPressed, setIsPressed] = useState(false);
+
+  const handlePressIn = () => {
+    setIsPressed(true);
+  };
+
+  const handlePressOut = () => {
+    setIsPressed(false);
+  };
+
   return (
     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
       <Image
@@ -23,13 +49,24 @@ const HeaderTitle = () => {
         style={{ flex: 1, height: 32, width: '30%', objectFit: "contain" }}
       />
       <View style={{ flex: 1, width: 32, height: 32 }}>
-        <TouchableOpacity onLongPress={handleLogin}>
-          <AntDesign name="logout" size={32} color="black" />
+        <TouchableOpacity
+          onLongPress={handleLogin}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          style={isPressed ? styles.pressedButton : null}
+        >
+          <MaterialCommunityIcons name="logout" size={32} color="black" />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  pressedButton: {
+    opacity: 0.5,
+  },
+});
 
 export default () => {
   return (
