@@ -10,8 +10,6 @@ import {
   ScrollView,
   SafeAreaView
 } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { StatusBar } from 'expo-status-bar';
 import { getClientsById } from 'services/api';
 import Button from 'components/Button';
@@ -19,26 +17,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 import jwt from '@/services/jwt';
 import { Link } from 'expo-router';
 
-
-
-const fotos = [
-  { value: '1', image: require('assets/images/unidades/1.png') },
-  { value: '2', image: require('assets/images/unidades/2.png') },
-  { value: '3', image: require('assets/images/unidades/3.png') },
-  { value: '11', image: require('assets/images/unidades/11.png') },
-  { value: '13', image: require('assets/images/unidades/13.png') },
-  { value: '15', image: require('assets/images/unidades/15.png') },
-  { value: '16', image: require('assets/images/unidades/16.png') },
-  { value: '17', image: require('assets/images/unidades/17.png') },
-  { value: '18', image: require('assets/images/unidades/18.png') },
-  { value: '20', image: require('assets/images/unidades/20.png') },
-  { value: '22', image: require('assets/images/unidades/22.png') },
-  { value: '23', image: require('assets/images/unidades/23.png') },
-  { value: '24', image: require('assets/images/unidades/24.png') },
-  { value: '26', image: require('assets/images/unidades/26.png') },
-  { value: '27', image: require('assets/images/unidades/27.png') },
-  { value: '28', image: require('assets/images/unidades/28.png') },
-];
 const defaultImage = require('assets/images/unidades/default.png');
 
 const DropdownComponent = () => {
@@ -92,49 +70,56 @@ const DropdownComponent = () => {
 
 
   return (
-    <ImageBackground source={selectedImage} style={styles.fundo}>
 
-      <View style={styles.card}>
 
-        <TouchableOpacity onPress={openModal} style={styles.dropdown}>
-          <Text>{selectedItem ? selectedItem.label : "Selecione a unidade"}</Text>
-        </TouchableOpacity>
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={modalVisible}
-          onRequestClose={closeModal}
-        >
-          <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
-              {data.map((item) => (
-                <TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
-                  <Text style={styles.item}>{item.label}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
 
-            <TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
-              <Text style={{ color: '#fff' }}>Fechar</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </Modal>
+    <View style={styles.card}>
 
-        {!!value ? (
-          <Link href={'/(stack)/inspections/' + value} asChild>
-            <Button texto='Proseguir' line={16} marginTop={16}>
-              <MaterialIcons name="navigate-next" size={16} color="white" />
-            </Button>
-          </Link>
+      <ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
 
-        ) : (
-          <Button texto='Proseguir' line={16} marginTop={16} >
+      <TouchableOpacity onPress={openModal} style={styles.dropdown}>
+
+        <Text>{selectedItem ? selectedItem.label : "Selecione a unidade"}</Text>
+        {!selectedItem && (
+          <MaterialIcons name="list" size={24} color="black" />
+        )}
+
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView>
+            {data.map((item) => (
+              <TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
+                <Text style={styles.item}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          <TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
+            <Text style={{ color: '#fff' }}>Fechar</Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </Modal>
+
+      {!!value ? (
+        <Link href={'/(stack)/inspections/' + value} asChild>
+          <Button texto='Proseguir' line={16} marginTop={16}>
             <MaterialIcons name="navigate-next" size={16} color="white" />
           </Button>
-        )}
-        <StatusBar style='dark' />
-      </View>
-    </ImageBackground>
+        </Link>
+
+      ) : (
+        <Button texto='Proseguir' line={16} marginTop={16} >
+          <MaterialIcons name="navigate-next" size={16} color="white" />
+        </Button>
+      )}
+      <StatusBar style='dark' />
+    </View>
 
   );
 };
@@ -146,6 +131,26 @@ const styles = StyleSheet.create({
   fundo: {
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  cardImage: {
+    width: '100%', // Ajuste a largura conforme necessário
+    height: 400, // Ajuste a altura conforme necessário
+    borderRadius: 8,
+    marginTop: 16,
+    backgroundColor: '#fff', // Cor de fundo para a borda
+    overflow: 'hidden', // Para manter a borda arredondada
+    borderWidth: 1, // Espessura da borda
+    borderColor: '#d1d1d1', // Cor da borda
+    shadowColor: "#000", // Cor da sombra
+    shadowOffset: {
+      width: 0,
+      height: 4, // Quanto maior, mais distante parecerá a sombra
+    },
+    shadowOpacity: 0.3, // Opacidade da sombra
+    shadowRadius: 5, // Suavidade da sombra
+    elevation: 10, // Para Android, efeito de elevação/sombra
+
+
   },
   item: {
     marginTop: 20,
@@ -162,7 +167,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     justifyContent: 'center',
     margin: 20,
-    //marginTop: 50,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#d1d1d1',
@@ -183,6 +187,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     marginRight: 5,
@@ -243,4 +251,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
 
   },
+
+
 });

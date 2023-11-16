@@ -45,8 +45,11 @@ const inspections = () => {
                         <Text style={style.paragrafo}>Criado em: {formData(e.date_created)}</Text>
                         <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
 
-                        <Text style={style.paragrafo}>Status:
-                            <Text style={e.status_inspection_desc == "Não iniciado" ? style.statusColor : {}}>{e.status_inspection_desc}</Text>
+                        <Text style={style.paragrafo}>
+                            Status:
+                            <Text style={e.status_inspection_desc === "Não iniciado" ? style.statusNaoIniciado : e.status_inspection_desc === "Iniciado" ? style.statusIniciado : {}}>
+                                {e.status_inspection_desc}
+                            </Text>
                         </Text>
                         <Link href={{
                             pathname: '/(stack)/tarefas/',
@@ -100,8 +103,14 @@ const style = StyleSheet.create({
         borderRadius: 8,
 
     },
-    statusColor: {
-        color: "#6c757d"
+
+    statusNaoIniciado: {
+        fontWeight: "bold",
+        color: "#6c757d", // Cinza
+    },
+    statusIniciado: {
+        fontWeight: "bold",
+        color: "#0d6efd", // Azul
     }
 
 })
