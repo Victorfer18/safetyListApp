@@ -7,7 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
   ImageBackground,
-  ScrollView
+  ScrollView,
+  SafeAreaView
 } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -52,7 +53,7 @@ const DropdownComponent = () => {
       const data = await jwt()
 
       getClientsById(data.client_id).then(res => {
-        setData(res.payload.map(e => ({ label: e.info_name, value: e.client_id, image: require('assets/images/unidades/1.png') })));
+        setData(res.payload.map(e => ({ label: e.info_name, value: e.client_id, image: { uri: e.image } })));
       })
     })()
 
@@ -70,7 +71,7 @@ const DropdownComponent = () => {
 
   const selectItem = (item) => {
     setValue(item.value);
-    setSelectedImage(fotos.find(i => i.value == item.value)?.image || defaultImage);
+    setSelectedImage(item?.image || defaultImage);
     setModalVisible(false);
   };
 
@@ -94,9 +95,9 @@ const DropdownComponent = () => {
     <ImageBackground source={selectedImage} style={styles.fundo}>
 
       <View style={styles.card}>
-        {renderLabel()}
+
         <TouchableOpacity onPress={openModal} style={styles.dropdown}>
-          <Text>{selectedItem ? selectedItem.label : "Select item"}</Text>
+          <Text>{selectedItem ? selectedItem.label : "Selecione a unidade"}</Text>
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -104,28 +105,30 @@ const DropdownComponent = () => {
           visible={modalVisible}
           onRequestClose={closeModal}
         >
-          <ScrollView>
-            {data.map((item) => (
-              <TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
-                <Text style={styles.item}>{item.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+              {data.map((item) => (
+                <TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
+                  <Text style={styles.item}>{item.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
 
-          <TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
-            <Text style={{ color: '#fff' }}>Fechar</Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
+              <Text style={{ color: '#fff' }}>Fechar</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
         </Modal>
 
         {!!value ? (
           <Link href={'/(stack)/inspections/' + value} asChild>
-            <Button texto='Proseguir' line={16} marginTop={16} active={!!value}>
+            <Button texto='Proseguir' line={16} marginTop={16}>
               <MaterialIcons name="navigate-next" size={16} color="white" />
             </Button>
           </Link>
 
         ) : (
-          <Button texto='Proseguir' line={16} marginTop={16} active={!!value}>
+          <Button texto='Proseguir' line={16} marginTop={16} >
             <MaterialIcons name="navigate-next" size={16} color="white" />
           </Button>
         )}
@@ -159,6 +162,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     justifyContent: 'center',
     margin: 20,
+    //marginTop: 50,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#d1d1d1',
@@ -173,6 +177,7 @@ const styles = StyleSheet.create({
 
   },
   dropdown: {
+    marginTop: 16,
     height: 50,
     borderColor: 'gray',
     borderWidth: 0.5,

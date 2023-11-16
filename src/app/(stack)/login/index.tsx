@@ -30,6 +30,12 @@ const App = () => {
         })()
 
     }, []);
+
+    const validateEmail = (email) => {
+        const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return re.test(String(email).toLowerCase());
+    };
+
     const handleLogin = async () => {
         setLoad(true)
         setMessage('');
@@ -45,36 +51,34 @@ const App = () => {
             return;
         }
 
+        if (!validateEmail(username)) {
+            setTimeout(() => {
+                setMessage('Por favor, insira um e-mail válido.');
+                setLoad(false);
+                setTimeout(() => {
+                    setMessage('');
+                }, 3000);
+            }, 2000);
+            return;
+        }
+
         try {
             const response = await login(username, password);
             if (response.success && response.payload) {
                 await AsyncStorage.setItem('userToken', response.payload);
                 router.replace({ pathname: '/(stack)/unidades' });
-            } else {
-                setTimeout(() => {
-                    setMessage('Senha incorreta.');
-                    setLoad(false);
-                    setTimeout(() => {
-                        setMessage('')
-                    }, 3000)
-                }, 2000);
             }
         } catch (error) {
             setTimeout(() => {
-                setMessage('Usuário não encontrado para o uso desta ferramenta.');
+                let msgError = error + ''
+                setMessage(msgError.replace('Error:', ''));
+                console.log(error)
                 setLoad(false);
                 setTimeout(() => {
                     setMessage('')
                 }, 3000)
             }, 2000);
         }
-
-        // setTimeout(() => {
-        //         setLoad(false)
-        //         setTimeout(() => {
-        //             setMessage('')
-        //         }, 3000)
-        //     }, 2000);
     };
 
     return (

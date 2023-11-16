@@ -8,7 +8,8 @@ import { alterStatusInspectionById, getInspectionsByClient } from 'services/api'
 import { Link } from "expo-router";
 
 function formData(data: String) {
-    return data?.substr(0, 10).split('-').reverse().join('/')
+    let formatada = data?.substr(0, 10).split('-').reverse().join('/')
+    return formatada == "00/00/0000" ? " - " : formatada
 };
 
 function alterStatus(user_id, inspection_id, status_inspection) {
@@ -40,10 +41,13 @@ const inspections = () => {
                 {lista.map((e, i) => (
 
                     <Card key={i}>
-                        <Text style={style.titulo}>{e.info_name}</Text>
+                        <Text style={style.titulo}>{e.inspection_name}</Text>
                         <Text style={style.paragrafo}>Criado em: {formData(e.date_created)}</Text>
                         <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
-                        <Text style={style.paragrafo}>Status: {e.status_inspection_desc}</Text>
+
+                        <Text style={style.paragrafo}>Status:
+                            <Text style={e.status_inspection_desc == "Não iniciado" ? style.statusColor : {}}>{e.status_inspection_desc}</Text>
+                        </Text>
                         <Link href={{
                             pathname: '/(stack)/tarefas/',
                             params: { client_id: e.client_id, inspection_id: e.inspection_id, client_parent: e.client_parent, user_id: e.user_id }
@@ -59,7 +63,7 @@ const inspections = () => {
                 }
             </ScrollView>
             <StatusBar style="dark" />
-        </View>
+        </View >
     )
 }
 
@@ -95,6 +99,9 @@ const style = StyleSheet.create({
         margin: 16,
         borderRadius: 8,
 
+    },
+    statusColor: {
+        color: "#6c757d"
     }
 
 })

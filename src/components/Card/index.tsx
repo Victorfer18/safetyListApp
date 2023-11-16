@@ -7,7 +7,7 @@ const Card = forwardRef<TouchableOpacity, Props>(({ children, ...rest }: any, re
 
 
     return (
-        <TouchableOpacity ref={ref}
+        <TouchableOpacity activeOpacity={1} ref={ref}
             style={styles.Box}>
             {children}
         </TouchableOpacity>

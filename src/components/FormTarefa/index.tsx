@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Image, FlatList } from "react-native";
+import { Text, View, StyleSheet, Image, KeyboardAvoidingView, Platform } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from '@expo/vector-icons';
 import Card from "@/components/Card";
@@ -50,78 +50,82 @@ function FormTarefa({ item, index }: any) {
     };
 
     return (
-        <Card key={index} >
-            <Text style={styles.tituloCard}>
-                {item.maintenance_type_name}
-            </Text>
-            <View>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}
+        >
+            <Card key={index} >
+                <Text style={styles.tituloCard}>
+                    {item.maintenance_type_name}
+                </Text>
+                <View>
 
-                {item?.file_url && (
-                    <Image source={{ uri: item?.file_url }} alt={photoUri || ''} style={styles.imgDefault} />
-                )}
-                {!item?.file_url && (
-                    <Image source={photoUri ? { uri: photoUri } : defaultImage} alt={photoUri || ''} style={styles.imgDefault} />
-                )}
-                {item?.file_url && (
+                    {item?.file_url && (
+                        <Image source={{ uri: item?.file_url }} alt={photoUri || ''} style={styles.imgDefault} />
+                    )}
+                    {!item?.file_url && (
+                        <Image source={photoUri ? { uri: photoUri } : defaultImage} alt={photoUri || ''} style={styles.imgDefault} />
+                    )}
+                    {item?.file_url && (
 
 
-                    <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} active={false}>
-                        <AntDesign name="clouduploado" size={24} color="white" />
-                    </Button>
-
-                )}
-
-                {!item?.file_url && (
-                    <Link href={{
-                        pathname: '/(stack)/tarefa/camera',
-                        params: { system_type_id: local.system_type_id, client_id: local.client_id, client_parent: local.client_parent, user_id: local.user_id, select_id: index, system_id: local.system_id }
-                    }} asChild >
-
-                        <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16}  >
+                        <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} active={false}>
                             <AntDesign name="clouduploado" size={24} color="white" />
                         </Button>
-                    </Link>
-                )}
 
-            </View>
-            <View style={styles.btnArea}>
-                <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(1) }}>
-                    <View style={styles.wrapper}>
-                        <View style={styles.radio}>
-                            {selectedRadio == 1 ? <View style={styles.radioBg}></View> : null}
+                    )}
+
+                    {!item?.file_url && (
+                        <Link href={{
+                            pathname: '/(stack)/tarefa/camera',
+                            params: { system_type_id: local.system_type_id, client_id: local.client_id, client_parent: local.client_parent, user_id: local.user_id, select_id: index, system_id: local.system_id }
+                        }} asChild >
+
+                            <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16}  >
+                                <AntDesign name="clouduploado" size={24} color="white" />
+                            </Button>
+                        </Link>
+                    )}
+
+                </View>
+                <View style={styles.btnArea}>
+                    <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(1) }}>
+                        <View style={styles.wrapper}>
+                            <View style={styles.radio}>
+                                {selectedRadio == 1 ? <View style={styles.radioBg}></View> : null}
+                            </View>
+                            <Text style={styles.radioText}>Consistente</Text>
                         </View>
-                        <Text style={styles.radioText}>Consistente</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(2) }}>
-                    <View style={styles.wrapper}>
-                        <View style={styles.radio}>
-                            {selectedRadio == 2 ? <View style={styles.radioBg}></View> : null}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(2) }}>
+                        <View style={styles.wrapper}>
+                            <View style={styles.radio}>
+                                {selectedRadio == 2 ? <View style={styles.radioBg}></View> : null}
+                            </View>
+                            <Text style={styles.radioText}>Inconsistente</Text>
                         </View>
-                        <Text style={styles.radioText}>Inconsistente</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.container}>
-                <CustomInput
-                    placeholder="Observações"
-                    value={inputValue1}
-                    onChangeText={(text) => { if (!item?.file_url) setInputValue1(text) }}
-                />
-                {selectedRadio == 2 && (
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.container}>
                     <CustomInput
-                        placeholder="Ações a serem tomadas"
-                        value={inputValue2}
-                        onChangeText={(text) => { if (!item?.file_url) setInputValue2(text) }}
+                        placeholder="Observações"
+                        value={inputValue1}
+                        onChangeText={(text) => { if (!item?.file_url) setInputValue1(text) }}
                     />
-                )}
-                <StatusBar style="dark" />
-            </View>
-            <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={() => { if (!item?.file_url) { saveTarefa(item) } }} active={!item?.file_url}>
-                <AntDesign name="checkcircleo" size={16} color="white" />
-            </Button>
-        </Card >
-
+                    {selectedRadio == 2 && (
+                        <CustomInput
+                            placeholder="Ações a serem tomadas"
+                            value={inputValue2}
+                            onChangeText={(text) => { if (!item?.file_url) setInputValue2(text) }}
+                        />
+                    )}
+                    <StatusBar style="dark" />
+                </View>
+                <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={() => { if (!item?.file_url) { saveTarefa(item) } }} active={!item?.file_url}>
+                    <AntDesign name="checkcircleo" size={16} color="white" />
+                </Button>
+            </Card >
+        </KeyboardAvoidingView>
     )
 }
 

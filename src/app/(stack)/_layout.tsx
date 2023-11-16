@@ -30,30 +30,22 @@ const handleLogin = () => {
 const HeaderTitle = () => {
   const [isPressed, setIsPressed] = useState(false);
 
-  const handlePressIn = () => {
-    setIsPressed(true);
-  };
-
-  const handlePressOut = () => {
-    setIsPressed(false);
-  };
-
   return (
     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
       <Image
         source={require('assets/images/logo/safety-list.png')}
-        style={{ flex: 1, height: 32, width: '30%', objectFit: "contain" }}
+        style={{
+          flex: 1, height: 32, width: '30%', resizeMode: "contain",
+
+        }}
       />
       <Image
         source={{ uri: 'https://safetylist.safety2u.com.br/public/clients/getLogoInspectable/7' }}
-        style={{ flex: 1, height: 32, width: '30%', objectFit: "contain" }}
+        style={{ flex: 1, height: 32, width: '30%', resizeMode: "contain" }}
       />
-      <View style={{ flex: 1, width: 32, height: 32 }}>
+      <View style={{ flex: 0, width: 32, height: 32, marginRight: 16 }}>
         <TouchableOpacity
-          onLongPress={handleLogin}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          style={isPressed ? styles.pressedButton : null}
+          onPress={handleLogin}
         >
           <MaterialCommunityIcons name="logout" size={32} color="black" />
         </TouchableOpacity>
@@ -72,7 +64,8 @@ export default () => {
   return (
     <Stack>
       <Stack.Screen name='login/index' options={{ headerShown: false }} />
-      <Stack.Screen name='inspections/[id]' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
+      <Stack.Screen name='inspections/[id]'
+        options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
       <Stack.Screen name='unidades/index' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
       <Stack.Screen name='tarefas/index' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />
       <Stack.Screen name='tarefa/index' options={{ headerShown: true, headerBackTitleVisible: false, headerTitle: () => <HeaderTitle /> }} />

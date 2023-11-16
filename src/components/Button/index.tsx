@@ -31,8 +31,8 @@ const Button = forwardRef<TouchableOpacity, Props>(({
         },
         disable: {
             marginTop,
-            backgroundColor: "transparent",
-            borderBlockColor: "#CCC",
+            backgroundColor: "#ccc",
+            borderBlockColor: "#ccc",
             borderWidth: 1,
             paddingVertical: line,
             paddingHorizontal: 20,
@@ -41,10 +41,11 @@ const Button = forwardRef<TouchableOpacity, Props>(({
             justifyContent: 'center',
             width,
             marginLeft,
+            color: 'white'
         },
-        disabledTest: {
+        disabledText: {
             textTransform: "uppercase",
-            color: '#CCC',
+            color: 'white',
             fontSize: 16,
             fontWeight: 'bold',
         }
@@ -59,7 +60,7 @@ const Button = forwardRef<TouchableOpacity, Props>(({
             {...rest}
         >
 
-            <Text style={active ? styles.buttonText : styles.disabledTest}>{children} {load ? 'carregando...' : texto}</Text>
+            <Text style={active ? styles.buttonText : styles.disabledText}>{children} {load ? 'carregando...' : texto}</Text>
 
         </TouchableOpacity>
     )

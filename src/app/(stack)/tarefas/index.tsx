@@ -121,6 +121,7 @@ const style = StyleSheet.create(
         },
         boxSpace: {
             margin: 18,
+
         },
         msgTarefas: {
             fontSize: 24,
@@ -129,7 +130,7 @@ const style = StyleSheet.create(
             backgroundColor: '#ccc',
             color: '#555',
             margin: 16,
-            borderRadius: 8,
+            borderRadius: 16,
 
         }
     }
