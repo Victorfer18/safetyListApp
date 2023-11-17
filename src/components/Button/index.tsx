@@ -32,8 +32,6 @@ const Button = forwardRef<TouchableOpacity, Props>(({
         disable: {
             marginTop,
             backgroundColor: "#ccc",
-            borderBlockColor: "#ccc",
-            borderWidth: 1,
             paddingVertical: line,
             paddingHorizontal: 20,
             borderRadius: 12,

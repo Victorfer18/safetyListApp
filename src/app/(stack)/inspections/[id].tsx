@@ -16,9 +16,7 @@ function alterStatus(user_id, inspection_id, status_inspection) {
     if (status_inspection == 1) {
         alterStatusInspectionById(user_id, inspection_id, 2)
     }
-
 };
-
 
 const inspections = () => {
     const { id } = useSearchParams();
@@ -30,7 +28,6 @@ const inspections = () => {
 
         })()
     }, [])
-
     return (
         <View>
             <ScrollView>
@@ -46,8 +43,8 @@ const inspections = () => {
                         <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
 
                         <Text style={style.paragrafo}>
-                            Status:
-                            <Text style={e.status_inspection_desc === "Não iniciado" ? style.statusNaoIniciado : e.status_inspection_desc === "Iniciado" ? style.statusIniciado : {}}>
+                        <Text style={style.b}> Status: &nbsp;</Text>
+                            <Text style={e.status_inspection == 1 ? style.statusNaoIniciado : style.statusIniciado}>
                                 {e.status_inspection_desc}
                             </Text>
                         </Text>
@@ -62,7 +59,7 @@ const inspections = () => {
                     </Card>
                 ))}
                 {
-                    lista.length == 0 && (<Text style={style.msgInspecoes}>Não há inspeções a serem realizadas para essa unidade!</Text>)
+                    lista.length == 0 && ( <View style={style.msgInspecoes}><Text >Não há inspeções a serem realizadas para essa unidade!</Text></View> )
                 }
             </ScrollView>
             <StatusBar style="dark" />
@@ -73,6 +70,9 @@ const inspections = () => {
 export default inspections;
 
 const style = StyleSheet.create({
+    b: {
+        fontWeight: 'bold'
+    },
     titulo: {
         borderColor: '#ccc',
         borderBottomWidth: 1,
@@ -100,17 +100,14 @@ const style = StyleSheet.create({
         backgroundColor: '#ccc',
         color: '#555',
         margin: 16,
-        borderRadius: 8,
-
+        borderRadius: 16,
     },
-
     statusNaoIniciado: {
         fontWeight: "bold",
-        color: "#6c757d", // Cinza
+        color: "#6c757d",
     },
     statusIniciado: {
         fontWeight: "bold",
-        color: "#0d6efd", // Azul
+        color: "#0d6efd",
     }
-
 })

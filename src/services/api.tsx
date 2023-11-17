@@ -1,9 +1,21 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Buffer } from 'buffer';
 
 
+export const getJWT = async () => {
+	try {
+		const token = await AsyncStorage.getItem('userToken');
+		const base64Jwt = token?.split('.')[1];
+		const decode = Buffer.from(base64Jwt, 'base64').toString('ascii');
+		return JSON.parse(decode);
+	} catch (error) {
+		throw error;
+	}
+};
 
-const getAuthToken = async () => {
+
+export const getAuthToken = async () => {
 	try {
 		const token = await AsyncStorage.getItem('userToken');
 		return token;
@@ -136,6 +148,7 @@ export const getClientsById = async (clientId: number) => {
 		const response = await axiosInstance.get(`/clients/${clientId}`);
 		return response.data;
 	} catch (error) {
+		console.log(error)
 		throw new Error('Erro ao obter clientes por ID');
 	}
 };
