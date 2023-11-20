@@ -27,7 +27,7 @@ function FormTarefa({ item, index }: any) {
         }
 
         if (item?.file_url) {
-            setSelectedRadio(item.is_according ? 1 : 2)
+            setSelectedRadio(item.is_according ? 1 : 0)
             setInputValue1(item?.observation)
             setInputValue2(item?.action)
         }
@@ -46,9 +46,13 @@ function FormTarefa({ item, index }: any) {
             inputValue1,
             inputValue2,
             local.photoUri
-        )
-    };
 
+        )
+        console.log(res)
+
+    };
+    console.log(item.maintenance_type_name)
+    console.log(item.file_url)
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -97,10 +101,10 @@ function FormTarefa({ item, index }: any) {
                             <Text style={styles.radioText}>Consistente</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(2) }}>
+                    <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(0) }}>
                         <View style={styles.wrapper}>
                             <View style={styles.radio}>
-                                {selectedRadio == 2 ? <View style={styles.radioBg}></View> : null}
+                                {selectedRadio == 0 ? <View style={styles.radioBg}></View> : null}
                             </View>
                             <Text style={styles.radioText}>Inconsistente</Text>
                         </View>
@@ -112,7 +116,7 @@ function FormTarefa({ item, index }: any) {
                         value={inputValue1}
                         onChangeText={(text) => { if (!item?.file_url) setInputValue1(text) }}
                     />
-                    {selectedRadio == 2 && (
+                    {selectedRadio == 0 && (
                         <CustomInput
                             placeholder="Ações a serem tomadas"
                             value={inputValue2}
@@ -124,6 +128,7 @@ function FormTarefa({ item, index }: any) {
                 <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={() => { if (!item?.file_url) { saveTarefa(item) } }} active={!item?.file_url}>
                     <AntDesign name="checkcircleo" size={16} color="white" />
                 </Button>
+
             </Card >
         </KeyboardAvoidingView>
     )

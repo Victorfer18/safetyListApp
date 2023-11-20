@@ -109,7 +109,7 @@ export const register_maintenance = async (
 		form.append('maintenance_type_id', maintenance_type_id);
 		form.append('user_id', user_id);
 		form.append('client_parent', client_parent);
-		form.append('consistency_status', consistency_status);
+		form.append('consistency_status', consistency_status ? '1' : '0');
 		form.append('observation', observation);
 		form.append('action', action);
 		form.append('image', theBlob);
