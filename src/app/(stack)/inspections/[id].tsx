@@ -6,6 +6,7 @@ import { useSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { alterStatusInspectionById, getInspectionsByClient } from 'services/api';
 import { Link } from "expo-router";
+import CurrentCompany from '@/components/CurrentCompany';
 
 function formData(data: String) {
     let formatada = data?.substr(0, 10).split('-').reverse().join('/')
@@ -31,6 +32,7 @@ const inspections = () => {
     return (
         <View>
             <ScrollView>
+                <CurrentCompany />
                 <Text style={style.tituloPage}>
                     Inspeções
                 </Text>
@@ -43,14 +45,14 @@ const inspections = () => {
                         <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
 
                         <Text style={style.paragrafo}>
-                        <Text style={style.b}> Status: &nbsp;</Text>
+                            <Text style={style.b}> Status: &nbsp;</Text>
                             <Text style={e.status_inspection == 1 ? style.statusNaoIniciado : style.statusIniciado}>
                                 {e.status_inspection_desc}
                             </Text>
                         </Text>
                         <Link href={{
                             pathname: '/(stack)/tarefas/',
-                            params: { client_id: e.client_id, inspection_id: e.inspection_id, client_parent: e.client_parent, user_id: e.user_id }
+                            params: { client_id: e.client_id, inspection_id: e.inspection_id, client_parent: e.client_parent, user_id: e.user_id, inspection_name: e.inspection_name, inspecao: id }
                         }} asChild>
                             <Button texto='Inspecionar' onPress={() => {
                                 alterStatus(e.user_id, e.inspection_id, e.status_inspection)
@@ -59,7 +61,7 @@ const inspections = () => {
                     </Card>
                 ))}
                 {
-                    lista.length == 0 && ( <View style={style.msgInspecoes}><Text >Não há inspeções a serem realizadas para essa unidade!</Text></View> )
+                    lista.length == 0 && (<View style={style.msgInspecoes}><Text >Não há inspeções a serem realizadas para essa unidade!</Text></View>)
                 }
             </ScrollView>
             <StatusBar style="dark" />

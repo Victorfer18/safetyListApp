@@ -16,6 +16,7 @@ import Button from 'components/Button';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import jwt from '@/services/jwt';
 import { Link } from 'expo-router';
+import { setCompanyName } from '@/components/CurrentCompany';
 
 const defaultImage = { uri: 'https://safetylist.safety2u.com.br/public/images/unidades/default.jpg' }
 
@@ -25,12 +26,13 @@ const DropdownComponent = () => {
 	const [data, setData] = useState([]);
 	const [selectedImage, setSelectedImage] = useState(defaultImage);
 	const [isFocus, setIsFocus] = useState(false);
+	const [name, setName] = useState('');
 
 	useEffect(() => {
 		; (async _ => {
 			const data = await jwt()
 			getClientsById(data.client_id).then(res => {
-				setData(res.payload.map(e => ({ label: e.info_name, value: e.client_id, image: { uri: e.image } })));
+				setData(res.payload.map((e:any) => ({ label: e.info_name, value: e.client_id, image: { uri: e.image } })));
 			})
 		})()
 
@@ -46,14 +48,15 @@ const DropdownComponent = () => {
 		setModalVisible(false);
 	};
 
-	const selectItem = (item) => {
+	const selectItem = (item:any) => {
 		setValue(item.value);
+		setName(item.label);
 		setSelectedImage(item?.image || defaultImage);
 		setModalVisible(false);
 	};
 
-	const selectedItem = data.find(item => item.value === value);
-	const labelText = selectedItem ? selectedItem.label : "Unidades";
+	const selectedItem = data.find(item => item?.value === value);
+	const labelText = selectedItem ? selectedItem?.label : "Unidades";
 	const renderLabel = () => {
 		{
 			return (
@@ -96,7 +99,7 @@ const DropdownComponent = () => {
 				</SafeAreaView>
 			</Modal>
 			{!!value ? (
-				<Link href={'/(stack)/inspections/' + value} asChild>
+				<Link href={'/(stack)/inspections/' + value} onPress={() => setCompanyName(name) } asChild>
 					<Button texto='Prosseguir' line={16} marginTop={16}>
 						<MaterialIcons name="navigate-next" size={16} color="white" />
 					</Button>

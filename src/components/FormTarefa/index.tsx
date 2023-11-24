@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Image, KeyboardAvoidingView, Platform } from "react-native";
+import { Text, View, StyleSheet, Image, KeyboardAvoidingView, Platform, Modal } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from '@expo/vector-icons';
 import Card from "@/components/Card";
@@ -9,6 +9,8 @@ import { StatusBar } from "expo-status-bar";
 import { register_maintenance } from 'services/api';
 import CustomInput from '@/components/CustomInput';
 import jwt from "@/services/jwt";
+import MessageDisplay from '@/components/feedBack';
+import CameraComponent from '@/components/Camera';
 
 function FormTarefa({ item, index }: any) {
     const local = useLocalSearchParams();
@@ -16,6 +18,21 @@ function FormTarefa({ item, index }: any) {
     const [selectedRadio, setSelectedRadio] = useState(1)
     const [inputValue1, setInputValue1] = useState('');
     const [inputValue2, setInputValue2] = useState('');
+
+    const [messageType, setMessageType] = useState('');
+    const [load, setLoad] = useState(false);
+    const [message, setMessage] = useState('');
+
+
+    const [isCameraVisible, setCameraVisible] = useState(false);
+    const openCamera = () => setCameraVisible(true);
+    const closeCamera = () => setCameraVisible(false);
+
+    const handleSavePhoto = (uri) => {
+        setPhotoUri(uri);
+        closeCamera();
+    };
+
 
     const defaultImage = require('assets/images/tarefa/default.jpg');
 
@@ -35,24 +52,50 @@ function FormTarefa({ item, index }: any) {
     }, [local?.photoUri]);
 
     async function saveTarefa(e: any) {
-        const dado = await jwt()
+        setLoad(true)
+        try {
+            const dado = await jwt()
 
-        const res = await register_maintenance(
-            local.system_type_id,
-            e.maintenance_type_id,
-            local.user_id,
-            local.client_parent,
-            selectedRadio == 1,
-            inputValue1,
-            inputValue2,
-            local.photoUri
+            const res = await register_maintenance(
+                local.system_type_id,
+                e.maintenance_type_id,
+                local.user_id,
+                local.client_parent,
+                selectedRadio == 1,
+                inputValue1,
+                inputValue2,
+                photoUri,
+            )
+            setTimeout(() => {
+                setMessage(res.message);
+                setMessageType("success");
+                setLoad(false);
+                setTimeout(() => {
+                    setMessage('')
+                }, 10000)
+            }, 2000);
 
-        )
-        console.log(res)
+
+        } catch (error) {
+            let msgError = error
+            setTimeout(() => {
+                setMessage(msgError.message);
+                setMessageType("error");
+                setLoad(false);
+                setTimeout(() => {
+                    setMessage('')
+                }, 10000)
+            }, 2000);
+
+        }
+
 
     };
-    console.log(item.maintenance_type_name)
-    console.log(item.file_url)
+
+    async function renderSaveTarefa() {
+        if (!item?.file_url) { saveTarefa(item) }
+    }
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -71,24 +114,15 @@ function FormTarefa({ item, index }: any) {
                         <Image source={photoUri ? { uri: photoUri } : defaultImage} alt={photoUri || ''} style={styles.imgDefault} />
                     )}
                     {item?.file_url && (
-
-
                         <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} active={false}>
                             <AntDesign name="clouduploado" size={24} color="white" />
                         </Button>
-
                     )}
 
                     {!item?.file_url && (
-                        <Link href={{
-                            pathname: '/(stack)/tarefa/camera',
-                            params: { system_type_id: local.system_type_id, client_id: local.client_id, client_parent: local.client_parent, user_id: local.user_id, select_id: index, system_id: local.system_id }
-                        }} asChild >
-
-                            <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16}  >
-                                <AntDesign name="clouduploado" size={24} color="white" />
-                            </Button>
-                        </Link>
+                        <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} onPress={openCamera}>
+                            <AntDesign name="clouduploado" size={24} color="white" />
+                        </Button>
                     )}
 
                 </View>
@@ -125,12 +159,23 @@ function FormTarefa({ item, index }: any) {
                     )}
                     <StatusBar style="dark" />
                 </View>
-                <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={() => { if (!item?.file_url) { saveTarefa(item) } }} active={!item?.file_url}>
-                    <AntDesign name="checkcircleo" size={16} color="white" />
+                <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={renderSaveTarefa} load={load} active={!item?.file_url}>
+                    <AntDesign name={load ? "loading1" : "checkcircleo"} size={16} color="white" />
                 </Button>
 
+                <MessageDisplay message={message} type={messageType} show={!!message} />
+
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={isCameraVisible}
+                    onRequestClose={closeCamera}
+                >
+                    <CameraComponent onSave={handleSavePhoto} onClose={closeCamera} />
+                </Modal>
             </Card >
-        </KeyboardAvoidingView>
+
+        </KeyboardAvoidingView >
     )
 }
 
@@ -218,6 +263,9 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
         color: '#222',
         fontWeight: "800",
+    },
+    feedBack: {
+        justifyContent: 'center',
     }
 
 });

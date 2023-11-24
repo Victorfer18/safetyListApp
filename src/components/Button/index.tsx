@@ -56,6 +56,7 @@ const Button = forwardRef<TouchableOpacity, Props>(({
         <TouchableOpacity ref={ref}
             style={active ? styles.customButton : styles.disable} onPress={fn}
             {...rest}
+            activeOpacity={load ? 1 : 0}
         >
 
             <Text style={active ? styles.buttonText : styles.disabledText}>{children} {load ? 'carregando...' : texto}</Text>

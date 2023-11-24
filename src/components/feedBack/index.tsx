@@ -20,7 +20,7 @@ const MessageDisplay = ({ message, type = 'error', show = false }) => {
 const stylesContainer = StyleSheet.create({
     default: {
         padding: 10,
-        margin: 10,
+        margin: 0,
         borderWidth: 1,
         width: "100%",
         borderRadius: 8,
