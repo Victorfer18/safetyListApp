@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import { getInspectableList, saveInspectableIsClosed, alterStatusInspectionById } from 'services/api';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import CardTarefas from "@/components/CardTarefas";
 
 import Button from 'components/Button'
@@ -18,6 +18,7 @@ const tarefas = () => {
 
     const local = useLocalSearchParams();
     const [lista, setLista] = useState([])
+
     useEffect(() => {
         (async () => {
 
@@ -26,11 +27,10 @@ const tarefas = () => {
             setLista(res.payload)
         })()
     }, [])
-
     async function alterStatus() {
         if (lista.every(m => m.is_closed == 1)) {
             await alterStatusInspectionById(local.user_id, local.inspection_id, 3)
-            router.replace({ pathname: '/(stack)/inspections/' + local.inspection_id });
+            router.push({ pathname: '/(stack)/inspections/' + local.inspection_id });
         }
     };
 
@@ -41,8 +41,12 @@ const tarefas = () => {
                 <Text style={style.tituloPage}>
                     Tarefas
                 </Text>
-
-                <CardTarefas style={style} lista={lista} />
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={{ flex: 1 }}
+                >
+                    <CardTarefas style={style} lista={lista} />
+                </KeyboardAvoidingView>
                 <View style={style.boxSpace}>
                     {
                         lista.length == 0 && (<Text style={style.msgTarefas}>Não há tarefas a serem realizadas para essa inspeção!</Text>)

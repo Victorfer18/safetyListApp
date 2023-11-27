@@ -21,6 +21,7 @@ const CardTarefas = ({ style, lista }: any) => {
                     asChild
                     key={i}
                 >
+
                     <TouchableOpacity style={e.is_closed == 1 ? styleDisable.desativo : style.task}>
                         <View style={style.itemContainer}>
                             <Image

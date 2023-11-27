@@ -2,8 +2,8 @@ import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Button from '../../../components/Button';
 import Card from "../../../components/Card";
 import { StatusBar } from "expo-status-bar";
-import { useSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useSearchParams, useFocusEffect } from "expo-router";
+import { useEffect, useState, useCallback } from "react";
 import { alterStatusInspectionById, getInspectionsByClient } from 'services/api';
 import { Link } from "expo-router";
 import CurrentCompany from '@/components/CurrentCompany';
@@ -21,14 +21,33 @@ function alterStatus(user_id, inspection_id, status_inspection) {
 
 const inspections = () => {
     const { id } = useSearchParams();
-    const [lista, setLista] = useState([])
-    useEffect(() => {
-        (async () => {
-            const res = await getInspectionsByClient(id)
-            setLista(res.payload)
+    const [lista, setLista] = useState([]);
 
-        })()
-    }, [])
+    const loadData = async () => {
+        if (id) { // Verifica se `id` está definido
+            try {
+                const res = await getInspectionsByClient(id);
+                setLista(res.payload);
+            } catch (error) {
+                console.error("Erro ao carregar dados:", error);
+                // Tratamento adicional de erro, se necessário
+            }
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            loadData();
+            console.log(id)
+
+
+        }, [id]) // Dependências que, quando alteradas, fazem com que o efeito seja reexecutado
+
+
+
+    );
+
+
     return (
         <View>
             <ScrollView>

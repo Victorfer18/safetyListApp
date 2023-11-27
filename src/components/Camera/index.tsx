@@ -109,10 +109,10 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     saveButton: {
-        backgroundColor: 'blue',
+        backgroundColor: '#05f',
     },
     discardButton: {
-        backgroundColor: 'red',
+        backgroundColor: '#be1622',
     },
 });
 

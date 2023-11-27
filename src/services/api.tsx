@@ -67,14 +67,14 @@ export const getInspectableList = async (inspection_id: number, client_id: numbe
 };
 
 export const saveInspectableIsClosed = async (
-	clientId: number,
+	clientParent: number,
 	inspectionId: number,
 	systemTypeId: number
 ) => {
 	await setAuthToken();
 	try {
 		const requestBody = {
-			client_id: clientId,
+			client_parent: clientParent,
 			inspection_id: inspectionId,
 			system_type_id: systemTypeId
 		};
