@@ -97,85 +97,79 @@ function FormTarefa({ item, index }: any) {
     }
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}
-        >
-            <Card key={index} >
-                <Text style={styles.tituloCard}>
-                    {item.maintenance_type_name}
-                </Text>
-                <View>
+        <Card key={index} >
+            <Text style={styles.tituloCard}>
+                {item.maintenance_type_name}
+            </Text>
+            <View>
 
-                    {item?.file_url && (
-                        <Image source={{ uri: item?.file_url }} alt={photoUri || ''} style={styles.imgDefault} />
-                    )}
-                    {!item?.file_url && (
-                        <Image source={photoUri ? { uri: photoUri } : defaultImage} alt={photoUri || ''} style={styles.imgDefault} />
-                    )}
-                    {item?.file_url && (
-                        <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} active={false}>
-                            <AntDesign name="clouduploado" size={24} color="white" />
-                        </Button>
-                    )}
+                {item?.file_url && (
+                    <Image source={{ uri: item?.file_url }} alt={photoUri || ''} style={styles.imgDefault} />
+                )}
+                {!item?.file_url && (
+                    <Image source={photoUri ? { uri: photoUri } : defaultImage} alt={photoUri || ''} style={styles.imgDefault} />
+                )}
+                {item?.file_url && (
+                    <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} active={false}>
+                        <AntDesign name="clouduploado" size={24} color="white" />
+                    </Button>
+                )}
 
-                    {!item?.file_url && (
-                        <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} onPress={openCamera}>
-                            <AntDesign name="clouduploado" size={24} color="white" />
-                        </Button>
-                    )}
+                {!item?.file_url && (
+                    <Button texto='Foto' cor='#05f' line={16} width={120} marginTop={-70} marginLeft={16} onPress={openCamera}>
+                        <AntDesign name="clouduploado" size={24} color="white" />
+                    </Button>
+                )}
 
-                </View>
-                <View style={styles.btnArea}>
-                    <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(1) }}>
-                        <View style={styles.wrapper}>
-                            <View style={styles.radio}>
-                                {selectedRadio == 1 ? <View style={styles.radioBg}></View> : null}
-                            </View>
-                            <Text style={styles.radioText}>Consistente</Text>
+            </View>
+            <View style={styles.btnArea}>
+                <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(1) }}>
+                    <View style={styles.wrapper}>
+                        <View style={styles.radio}>
+                            {selectedRadio == 1 ? <View style={styles.radioBg}></View> : null}
                         </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(0) }}>
-                        <View style={styles.wrapper}>
-                            <View style={styles.radio}>
-                                {selectedRadio == 0 ? <View style={styles.radioBg}></View> : null}
-                            </View>
-                            <Text style={styles.radioText}>Inconsistente</Text>
+                        <Text style={styles.radioText}>Consistente</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { if (!item?.file_url) setSelectedRadio(0) }}>
+                    <View style={styles.wrapper}>
+                        <View style={styles.radio}>
+                            {selectedRadio == 0 ? <View style={styles.radioBg}></View> : null}
                         </View>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.container}>
+                        <Text style={styles.radioText}>Inconsistente</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.container}>
+                <CustomInput
+                    placeholder="Observações"
+                    value={inputValue1}
+                    onChangeText={(text) => { if (!item?.file_url) setInputValue1(text) }}
+                />
+                {selectedRadio == 0 && (
                     <CustomInput
-                        placeholder="Observações"
-                        value={inputValue1}
-                        onChangeText={(text) => { if (!item?.file_url) setInputValue1(text) }}
+                        placeholder="Ações a serem tomadas"
+                        value={inputValue2}
+                        onChangeText={(text) => { if (!item?.file_url) setInputValue2(text) }}
                     />
-                    {selectedRadio == 0 && (
-                        <CustomInput
-                            placeholder="Ações a serem tomadas"
-                            value={inputValue2}
-                            onChangeText={(text) => { if (!item?.file_url) setInputValue2(text) }}
-                        />
-                    )}
-                    <StatusBar style="dark" />
-                </View>
-                <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={renderSaveTarefa} load={load} active={!item?.file_url}>
-                    <AntDesign name={load ? "loading1" : "checkcircleo"} size={16} color="white" />
-                </Button>
+                )}
+                <StatusBar style="dark" />
+            </View>
+            <Button texto=' Salvar Tarefa' cor='#16be2e' line={16} marginTop={0} onPress={renderSaveTarefa} load={load} active={!item?.file_url}>
+                <AntDesign name={load ? "loading1" : "checkcircleo"} size={16} color="white" />
+            </Button>
 
-                <MessageDisplay message={message} type={messageType} show={!!message} />
+            <MessageDisplay message={message} type={messageType} show={!!message} />
 
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={isCameraVisible}
-                    onRequestClose={closeCamera}
-                >
-                    <CameraComponent onSave={handleSavePhoto} onClose={closeCamera} />
-                </Modal>
-            </Card >
-
-        </KeyboardAvoidingView >
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={isCameraVisible}
+                onRequestClose={closeCamera}
+            >
+                <CameraComponent onSave={handleSavePhoto} onClose={closeCamera} />
+            </Modal>
+        </Card >
     )
 }
 

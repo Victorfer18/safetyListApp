@@ -24,14 +24,16 @@ const inspections = () => {
     const [lista, setLista] = useState([]);
 
     const loadData = async () => {
-        if (id) { // Verifica se `id` está definido
+        if (id) {
             try {
                 const res = await getInspectionsByClient(id);
                 setLista(res.payload);
             } catch (error) {
                 console.error("Erro ao carregar dados:", error);
-                // Tratamento adicional de erro, se necessário
             }
+        }
+        else {
+            console.log('Carregando...')
         }
     };
 
@@ -39,9 +41,7 @@ const inspections = () => {
         useCallback(() => {
             loadData();
             console.log(id)
-
-
-        }, [id]) // Dependências que, quando alteradas, fazem com que o efeito seja reexecutado
+        }, [id])
 
 
 

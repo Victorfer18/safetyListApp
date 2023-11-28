@@ -41,12 +41,12 @@ const tarefas = () => {
                 <Text style={style.tituloPage}>
                     Tarefas
                 </Text>
-                <KeyboardAvoidingView
+                {/* <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
                     style={{ flex: 1 }}
-                >
-                    <CardTarefas style={style} lista={lista} />
-                </KeyboardAvoidingView>
+                > */}
+                <CardTarefas style={style} lista={lista} />
+                {/* </KeyboardAvoidingView> */}
                 <View style={style.boxSpace}>
                     {
                         lista.length == 0 && (<Text style={style.msgTarefas}>Não há tarefas a serem realizadas para essa inspeção!</Text>)

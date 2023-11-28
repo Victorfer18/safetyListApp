@@ -1,5 +1,5 @@
 import React, { forwardRef, ForwardedRef } from 'react';
-import { TextInput, StyleSheet, TextInputProps, View } from 'react-native';
+import { TextInput, StyleSheet, TextInputProps, View, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 
@@ -16,6 +16,7 @@ const CustomInput: React.ForwardRefRenderFunction<TextInput, CustomInputProps> =
     ref
 ) => {
     return (
+
         <View style={styles.container}>
             <AntDesign name={iconName || ''} size={24} color="#666" />
             <TextInput

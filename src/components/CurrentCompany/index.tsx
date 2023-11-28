@@ -6,7 +6,7 @@ export const styleHeaderCompanyName = StyleSheet.create({
     box: {
         backgroundColor: "#CCC"
     },
-    text : {
+    text: {
         textAlign: 'center',
         padding: 16
     }
