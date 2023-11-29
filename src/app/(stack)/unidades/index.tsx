@@ -75,6 +75,7 @@ const DropdownComponent = () => {
 		<BackgroundLayout>
 			<View style={styles.card}>
 
+<<<<<<< HEAD
 				<ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
 
 				<TouchableOpacity onPress={openModal} style={styles.dropdown}>
@@ -105,6 +106,45 @@ const DropdownComponent = () => {
 				{!!value ? (
 					<Link href={'/(stack)/inspections/' + value} onPress={() => setCompanyName(name)} asChild>
 						<Button texto='Prosseguir' line={16} marginTop={16}>
+=======
+					<ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
+					<View style={styles.unityTitle}>
+						<Text style={styles.unityTitleText}>Unidades</Text>
+					</View>
+					<TouchableOpacity onPress={openModal} style={styles.dropdown}>
+						<Text>{selectedItem ? selectedItem.label : "Selecione um item"}</Text>
+						<Entypo name="chevron-down" size={16} color="#333232" />
+					</TouchableOpacity>
+					<Modal
+						animationType="slide"
+						transparent={false}
+						visible={modalVisible}
+						onRequestClose={closeModal}
+					>
+						<SafeAreaView style={{ flex: 1 }}>
+							<ScrollView>
+								{data.map((item) => (
+									<TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
+										<View style={styles.item}>
+											<Text>{item.label}</Text>
+										</View>
+									</TouchableOpacity>
+								))}
+							</ScrollView>
+							<TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
+								<Text style={{ color: '#fff', fontSize: '20' }}>Fechar</Text>
+							</TouchableOpacity>
+						</SafeAreaView>
+					</Modal>
+					{!!value ? (
+						<Link href={'/(stack)/inspections/' + value} onPress={() => setCompanyName(name)} asChild>
+							<Button texto='Prosseguir' line={16} marginTop={16}>
+								<MaterialIcons name="navigate-next" size={16} color="white" />
+							</Button>
+						</Link>
+					) : (
+						<Button texto='Prosseguir' line={16} marginTop={16} >
+>>>>>>> 9158ef9db879985ead00b0877f9f99594e59c87a
 							<MaterialIcons name="navigate-next" size={16} color="white" />
 						</Button>
 					</Link>
@@ -139,11 +179,17 @@ const styles = StyleSheet.create({
 			width: 0,
 			height: 4,
 		},
+<<<<<<< HEAD
 		shadowOpacity: 0.3,
 		shadowRadius: 5,
 		elevation: 10,
 
 
+=======
+		shadowOpacity: 0.3, // Opacidade da sombra
+		shadowRadius: 5, // Suavidade da sombra
+		elevation: 10, // Para Android, efeito de elevação/sombra
+>>>>>>> 9158ef9db879985ead00b0877f9f99594e59c87a
 	},
 	item: {
 		marginTop: 20,
@@ -156,7 +202,7 @@ const styles = StyleSheet.create({
 	},
 	card: {
 		backgroundColor: '#f9f9f9',
-		padding: 20,
+		padding: 15,
 		paddingTop: 0,
 		justifyContent: 'center',
 		margin: 20,
@@ -240,5 +286,13 @@ const styles = StyleSheet.create({
 		margin: 16,
 		backgroundColor: '#be1622',
 		borderRadius: 16,
+	},
+	unityTitle: {
+		paddingTop: 20,
+		alignItems: 'center',
+	},
+	unityTitleText: {
+		fontSize: 20,
+		fontWeight: 'bold'
 	},
 });
