@@ -20,6 +20,8 @@ import { setCompanyName } from '@/components/CurrentCompany';
 
 const defaultImage = { uri: 'https://safetylist.safety2u.com.br/public/images/unidades/default.jpg' }
 
+const image = 'assets/images/login/background.png';
+
 const DropdownComponent = () => {
 
 	const [value, setValue] = useState(null);
@@ -32,7 +34,7 @@ const DropdownComponent = () => {
 		; (async _ => {
 			const data = await jwt()
 			getClientsById(data.client_id).then(res => {
-				setData(res.payload.map((e:any) => ({ label: e.info_name, value: e.client_id, image: { uri: e.image } })));
+				setData(res.payload.map((e: any) => ({ label: e.info_name, value: e.client_id, image: { uri: e.image } })));
 			})
 		})()
 
@@ -48,7 +50,7 @@ const DropdownComponent = () => {
 		setModalVisible(false);
 	};
 
-	const selectItem = (item:any) => {
+	const selectItem = (item: any) => {
 		setValue(item.value);
 		setName(item.label);
 		setSelectedImage(item?.image || defaultImage);
@@ -69,59 +71,72 @@ const DropdownComponent = () => {
 	};
 
 	return (
-		<View style={styles.card}>
+		<ImageBackground source={require(image)} style={styles.imageBk}>
+			<View style={styles.container}>
+				<View style={styles.card}>
 
-			<ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
+					<ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
 
-			<TouchableOpacity onPress={openModal} style={styles.dropdown}>
-				<Text>{selectedItem ? selectedItem.label : "Selecione um item"}</Text>
-				<Entypo name="chevron-down" size={16} color="#333232" />
-			</TouchableOpacity>
-			<Modal
-				animationType="slide"
-				transparent={false}
-				visible={modalVisible}
-				onRequestClose={closeModal}
-			>
-				<SafeAreaView style={{ flex: 1 }}>
-					<ScrollView>
-						{data.map((item) => (
-							<TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
-								<View style={styles.item}>
-									<Text>{item.label}</Text>
-								</View>
-							</TouchableOpacity>
-						))}
-					</ScrollView>
-					<TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
-						<Text style={{ color: '#fff' }}>Fechar</Text>
+					<TouchableOpacity onPress={openModal} style={styles.dropdown}>
+						<Text>{selectedItem ? selectedItem.label : "Selecione um item"}</Text>
+						<Entypo name="chevron-down" size={16} color="#333232" />
 					</TouchableOpacity>
-				</SafeAreaView>
-			</Modal>
-			{!!value ? (
-				<Link href={'/(stack)/inspections/' + value} onPress={() => setCompanyName(name) } asChild>
-					<Button texto='Prosseguir' line={16} marginTop={16}>
-						<MaterialIcons name="navigate-next" size={16} color="white" />
-					</Button>
-				</Link>
-			) : (
-				<Button texto='Prosseguir' line={16} marginTop={16} >
-					<MaterialIcons name="navigate-next" size={16} color="white" />
-				</Button>
-			)}
-			<StatusBar style='dark' />
-		</View>
+					<Modal
+						animationType="slide"
+						transparent={false}
+						visible={modalVisible}
+						onRequestClose={closeModal}
+					>
+						<SafeAreaView style={{ flex: 1 }}>
+							<ScrollView>
+								{data.map((item) => (
+									<TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
+										<View style={styles.item}>
+											<Text>{item.label}</Text>
+										</View>
+									</TouchableOpacity>
+								))}
+							</ScrollView>
+							<TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
+								<Text style={{ color: '#fff' }}>Fechar</Text>
+							</TouchableOpacity>
+						</SafeAreaView>
+					</Modal>
+					{!!value ? (
+						<Link href={'/(stack)/inspections/' + value} onPress={() => setCompanyName(name)} asChild>
+							<Button texto='Prosseguir' line={16} marginTop={16}>
+								<MaterialIcons name="navigate-next" size={16} color="white" />
+							</Button>
+						</Link>
+					) : (
+						<Button texto='Prosseguir' line={16} marginTop={16} >
+							<MaterialIcons name="navigate-next" size={16} color="white" />
+						</Button>
+					)}
+					<StatusBar style='dark' />
+
+				</View>
+			</View>
+		</ImageBackground>
 	);
 };
 
 export default DropdownComponent;
 
 const styles = StyleSheet.create({
-	fundo: {
+	imageBk: {
 		flex: 1,
-		justifyContent: 'flex-end',
+		resizeMode: 'cover',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	container: {
+		flex: 1,
+		flexDirection: 'column',
+		justifyContent: 'center',
 	},
 	cardImage: {
+		minWidth: 320,
 		width: '100%', // Ajuste a largura conforme necessário
 		height: 270, // Ajuste a altura conforme necessário
 		borderRadius: 8,

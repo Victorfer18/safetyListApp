@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, ImageBackground } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import { getInspectableList, saveInspectableIsClosed, alterStatusInspectionById } from 'services/api';
@@ -11,7 +11,7 @@ import HeaderTitle from "@/components/HeaderTitle";
 
 import CurrentCompany from '@/components/CurrentCompany';
 
-
+const image = 'assets/images/login/background.png';
 
 
 const tarefas = () => {
@@ -35,31 +35,31 @@ const tarefas = () => {
     };
 
     return (
-        <View>
+        <ImageBackground source={require(image)} style={style.image}>
             <ScrollView>
-                <CurrentCompany />
-                <Text style={style.tituloPage}>
-                    Tarefas
-                </Text>
-                {/* <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    style={{ flex: 1 }}
-                > */}
-                <CardTarefas style={style} lista={lista} />
-                {/* </KeyboardAvoidingView> */}
-                <View style={style.boxSpace}>
-                    {
-                        lista.length == 0 && (<Text style={style.msgTarefas}>Não há tarefas a serem realizadas para essa inspeção!</Text>)
-                    }
-                    {
-                        lista.length > 0 && (<Button onPress={alterStatus} texto='Finalizar Tarefas' cor='#16be2e' line={20} active={lista.every(m => m.is_closed == 1)}>
-                            <AntDesign name="checkcircleo" size={16} color="white" />
-                        </Button>)
-                    }
+
+                <View style={style.container}>
+                    <CurrentCompany />
+
+                    <CardTarefas style={style} lista={lista} />
+
+                    <View style={style.boxSpace}>
+                        {
+                            lista.length == 0 && (<Text style={style.msgTarefas}>Não há tarefas a serem realizadas para essa inspeção!</Text>)
+                        }
+                        {
+                            lista.length > 0 && (<Button onPress={alterStatus} texto='Finalizar Tarefas' cor='#16be2e' line={20} active={lista.every(m => m.is_closed == 1)}>
+                                <AntDesign name="checkcircleo" size={16} color="white" />
+                            </Button>)
+                        }
+                    </View>
                 </View>
+
+                <StatusBar style="dark" />
+
             </ScrollView >
-            <StatusBar style="dark" />
-        </View >
+        </ImageBackground>
+
     )
 }
 
@@ -67,7 +67,16 @@ export default tarefas;
 
 const style = StyleSheet.create(
     {
-
+        container: {
+            flex: 1,
+            flexDirection: 'column',
+        },
+        image: {
+            flex: 1,
+            resizeMode: 'cover',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
         itemContainer: {
             justifyContent: "flex-end",
             alignItems: "center",
@@ -115,14 +124,7 @@ const style = StyleSheet.create(
             //backgroundColor: '#0002',
             padding: 12,
         },
-        tituloPage: {
-            fontSize: 34,
-            fontWeight: "800",
-            marginLeft: 18,
-            marginTop: 18,
-            textTransform: "uppercase",
-            color: '#222',
-        },
+
         icon: {
             textAlign: 'center',
             padding: 18,
