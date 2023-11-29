@@ -69,9 +69,11 @@ function FormTarefa({ item, index }: any) {
             setTimeout(() => {
                 setMessage(res.message);
                 setMessageType("success");
-                setLoad(false);
+                item.file_url = photoUri
+
                 setTimeout(() => {
                     setMessage('')
+                    setLoad(false);
                 }, 10000)
             }, 2000);
 
@@ -81,9 +83,10 @@ function FormTarefa({ item, index }: any) {
             setTimeout(() => {
                 setMessage(msgError.message);
                 setMessageType("error");
-                setLoad(false);
+
                 setTimeout(() => {
                     setMessage('')
+                    setLoad(false);
                 }, 10000)
             }, 2000);
 

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Buffer } from 'buffer';
+import NetInfo from '@react-native-community/netinfo';
+import * as Crypto from 'expo-crypto';
 
 
 export const getJWT = async () => {
@@ -43,8 +45,14 @@ const setAuthToken = async () => {
 
 export const getInspectionsByClient = async (clientId: number) => {
 	await setAuthToken();
+	let seed = { fn: 'getInspectionsByClient', clientId }
+	if (await isOff()) {
+		return await loadData(seed)
+
+	}
 	try {
 		const response = await axiosInstance.get(`/inspections/${clientId}`);
+		await saveData(seed, response.data)
 		return response.data;
 	} catch (error) {
 		throw new Error('Erro ao obter inspecoes por cliente');
@@ -53,13 +61,20 @@ export const getInspectionsByClient = async (clientId: number) => {
 
 export const getInspectableList = async (inspection_id: number, client_id: number) => {
 	await setAuthToken();
+	let seed = { fn: 'getInspectableList', client_id, inspection_id }
+	if (await isOff()) {
+		return await loadData(seed)
+
+	}
 	try {
+
 		const body = {
 			inspection_id,
 			client_id
 		};
 		const response = await axiosInstance.post('/inspections/getInspectableList', body
 		);
+		await saveData(seed, response.data)
 		return response.data;
 	} catch (error) {
 		throw new Error('Erro ao obter inspecoes por cliente');
@@ -96,6 +111,25 @@ export const register_maintenance = async (
 	imageUri: any
 ) => {
 	await setAuthToken();
+
+	if (await isOff()) {
+		let dataPut = (await loadData({ list: true }))
+		if (dataPut?.data) {
+			dataPut.data = []
+		}
+		dataPut.data.push({
+			system_type_id,
+			maintenance_type_id,
+			user_id,
+			client_parent,
+			consistency_status,
+			observation,
+			action,
+			imageUri
+		})
+		await saveData({ list: true }, dataPut)
+
+	}
 	try {
 		const file = await fetch(imageUri);
 		const theBlob = await file.blob();
@@ -127,6 +161,23 @@ export const register_maintenance = async (
 	}
 
 };
+async function sincronizar() {
+	let dataPut = (await loadData({ list: true }))
+	dataPut?.data?.forEach(async (payload: any) => {
+		await register_maintenance(
+
+			payload.system_type_id,
+			payload.maintenance_type_id,
+			payload.user_id,
+			payload.client_parent,
+			payload.consistency_status,
+			payload.observation,
+			payload.action,
+			payload.imageUri
+
+		)
+	});
+}
 
 export const alterStatusInspectionById = async (user_id: number, inspectionId: number, status: number) => {
 	await setAuthToken();
@@ -145,8 +196,14 @@ export const alterStatusInspectionById = async (user_id: number, inspectionId: n
 
 export const getClientsById = async (clientId: number) => {
 	await setAuthToken();
+	let seed = { fn: 'getClientsById', clientId }
+	if (await isOff()) {
+		return await loadData(seed)
+
+	}
 	try {
 		const response = await axiosInstance.get(`/clients/${clientId}`);
+		await saveData(seed, response.data)
 		return response.data;
 	} catch (error) {
 
@@ -166,12 +223,18 @@ export const validateJwt = async (clientId: number) => {
 
 
 export const get_maintenance_type = async (system_type_id: number, client_id: number) => {
+	let seed = { fn: 'get_maintenance_type', system_type_id, client_id }
+	if (await isOff()) {
+		return await loadData(seed)
+
+	}
 	try {
 		const requestBody = {
 			system_type_id,
 			client_id
 		};
 		const response = await axiosInstance.post('/inspections/get_maintenance_type', requestBody);
+		await saveData(seed, response.data)
 		return response.data;
 	} catch (error) {
 		throw new Error('Erro ao resgatar pergunta');
@@ -204,3 +267,39 @@ export const login = async (userEmail: string, userPassword: string) => {
 		throw new Error(error.response.data.message);
 	}
 };
+
+async function isOff() {
+	let net = await NetInfo.fetch()
+	return !net.isConnected
+}
+
+
+
+const saveData = async (seed: any, data: any) => {
+	const salt = await Crypto.digestStringAsync(
+		Crypto.CryptoDigestAlgorithm.SHA256,
+		JSON.stringify(seed)
+	);
+	try {
+		await AsyncStorage.setItem('$' + salt, JSON.stringify(data));
+	} catch (e) {
+		// salvar erro
+	}
+}
+
+
+const loadData = async (seed: any) => {
+	const salt = await Crypto.digestStringAsync(
+		Crypto.CryptoDigestAlgorithm.SHA256,
+		JSON.stringify(seed)
+	);
+	try {
+		const value = await AsyncStorage.getItem('$' + salt);
+		if (value !== null) {
+			return value
+		}
+	} catch (e) {
+		return {}
+	}
+	return {}
+}

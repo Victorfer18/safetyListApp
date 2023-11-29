@@ -66,6 +66,7 @@ const App = () => {
             if (response.success && response.payload) {
                 await AsyncStorage.setItem('userToken', response.payload);
                 router.push({ pathname: '/(stack)/unidades' });
+                setLoad(false);
             }
         } catch (error) {
             let msgError = error + ''

@@ -17,10 +17,11 @@ import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import jwt from '@/services/jwt';
 import { Link } from 'expo-router';
 import { setCompanyName } from '@/components/CurrentCompany';
+import BackgroundLayout from '@/components/BackgroundLayout';
 
 const defaultImage = { uri: 'https://safetylist.safety2u.com.br/public/images/unidades/default.jpg' }
 
-const image = 'assets/images/login/background.png';
+// const image = 'assets/images/login/background.png';
 
 const DropdownComponent = () => {
 
@@ -71,88 +72,76 @@ const DropdownComponent = () => {
 	};
 
 	return (
-		<ImageBackground source={require(image)} style={styles.imageBk}>
-			<View style={styles.container}>
-				<View style={styles.card}>
+		<BackgroundLayout>
+			<View style={styles.card}>
 
-					<ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
+				<ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
 
-					<TouchableOpacity onPress={openModal} style={styles.dropdown}>
-						<Text>{selectedItem ? selectedItem.label : "Selecione um item"}</Text>
-						<Entypo name="chevron-down" size={16} color="#333232" />
-					</TouchableOpacity>
-					<Modal
-						animationType="slide"
-						transparent={false}
-						visible={modalVisible}
-						onRequestClose={closeModal}
-					>
-						<SafeAreaView style={{ flex: 1 }}>
-							<ScrollView>
-								{data.map((item) => (
-									<TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
-										<View style={styles.item}>
-											<Text>{item.label}</Text>
-										</View>
-									</TouchableOpacity>
-								))}
-							</ScrollView>
-							<TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
-								<Text style={{ color: '#fff' }}>Fechar</Text>
-							</TouchableOpacity>
-						</SafeAreaView>
-					</Modal>
-					{!!value ? (
-						<Link href={'/(stack)/inspections/' + value} onPress={() => setCompanyName(name)} asChild>
-							<Button texto='Prosseguir' line={16} marginTop={16}>
-								<MaterialIcons name="navigate-next" size={16} color="white" />
-							</Button>
-						</Link>
-					) : (
-						<Button texto='Prosseguir' line={16} marginTop={16} >
+				<TouchableOpacity onPress={openModal} style={styles.dropdown}>
+					<Text>{selectedItem ? selectedItem.label : "Selecione um item"}</Text>
+					<Entypo name="chevron-down" size={16} color="#333232" />
+				</TouchableOpacity>
+				<Modal
+					animationType="slide"
+					transparent={false}
+					visible={modalVisible}
+					onRequestClose={closeModal}
+				>
+					<SafeAreaView style={{ flex: 1 }}>
+						<ScrollView>
+							{data.map((item) => (
+								<TouchableOpacity key={item.value} onPress={() => selectItem(item)}>
+									<View style={styles.item}>
+										<Text>{item.label}</Text>
+									</View>
+								</TouchableOpacity>
+							))}
+						</ScrollView>
+						<TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
+							<Text style={{ color: '#fff' }}>Fechar</Text>
+						</TouchableOpacity>
+					</SafeAreaView>
+				</Modal>
+				{!!value ? (
+					<Link href={'/(stack)/inspections/' + value} onPress={() => setCompanyName(name)} asChild>
+						<Button texto='Prosseguir' line={16} marginTop={16}>
 							<MaterialIcons name="navigate-next" size={16} color="white" />
 						</Button>
-					)}
-					<StatusBar style='dark' />
+					</Link>
+				) : (
+					<Button texto='Prosseguir' line={16} marginTop={16} >
+						<MaterialIcons name="navigate-next" size={16} color="white" />
+					</Button>
+				)}
+				<StatusBar style='dark' />
 
-				</View>
 			</View>
-		</ImageBackground>
+		</BackgroundLayout>
 	);
 };
 
 export default DropdownComponent;
 
 const styles = StyleSheet.create({
-	imageBk: {
-		flex: 1,
-		resizeMode: 'cover',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	container: {
-		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'center',
-	},
+
 	cardImage: {
-		minWidth: 320,
-		width: '100%', // Ajuste a largura conforme necessário
-		height: 270, // Ajuste a altura conforme necessário
+
+		width: '100%',
+		height: 270,
 		borderRadius: 8,
 		marginTop: 16,
-		backgroundColor: '#fff', // Cor de fundo para a borda
-		overflow: 'hidden', // Para manter a borda arredondada
-		borderWidth: 1, // Espessura da borda
-		borderColor: '#d1d1d1', // Cor da borda
-		shadowColor: "#000", // Cor da sombra
+		backgroundColor: '#fff',
+		overflow: 'hidden',
+		borderWidth: 1,
+		borderColor: '#d1d1d1',
+		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
-			height: 4, // Quanto maior, mais distante parecerá a sombra
+			height: 4,
 		},
-		shadowOpacity: 0.3, // Opacidade da sombra
-		shadowRadius: 5, // Suavidade da sombra
-		elevation: 10, // Para Android, efeito de elevação/sombra
+		shadowOpacity: 0.3,
+		shadowRadius: 5,
+		elevation: 10,
 
 
 	},

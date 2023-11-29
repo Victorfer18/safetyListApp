@@ -14,8 +14,8 @@ import MessageDisplay from "@/components/feedBack";
 import CurrentCompany from '@/components/CurrentCompany';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import BackgroundLayout from "@/components/BackgroundLayout";
 
-const image = 'assets/images/login/background.png';
 
 const App = ({ ...params }: any) => {
     const [lista, setLista] = useState([]);
@@ -76,62 +76,52 @@ const App = ({ ...params }: any) => {
     const render = ({ item, index }: any) => (<FormTarefa item={item} index={index} key={index} />)
 
     return (
+
         isLoading ? (
             <View style={styles.loadingContainer} >
                 <ActivityIndicator size="large" color="#0000ff" />
                 <Text style={styles.loadingText}>Carregando...</Text>
             </View >
         ) : (
-            <View style={styles.container}>
-                <ImageBackground source={require(image)} style={styles.image}>
-                    <View style={{ flex: 1 }}>
-                        <CurrentCompany />
-                        <KeyboardAwareScrollView extraScrollHeight={100} >
+            <BackgroundLayout>
 
-                            <Text style={styles.tituloPage}>Tarefa</Text>
+                <View style={{ flex: 1 }}>
+                    <CurrentCompany />
+                    <KeyboardAwareScrollView extraScrollHeight={100} >
 
-                            {lista.map((item, index) => (
-                                <FormTarefa item={item} index={index} key={index} />
-                            ))}
+                        <Text style={styles.tituloPage}>Tarefa</Text>
 
-                            <View style={{ margin: 16 }}>
-                                <Button
-                                    texto='Finalizar Tarefas'
-                                    cor='#16be2e'
-                                    line={20}
-                                    onPress={() => {
-                                        if (lista.every(e => e?.file_url)) {
-                                            final()
-                                        }
-                                    }}
-                                    active={lista.every(e => e?.file_url)}
-                                >
-                                    <AntDesign name="checkcircleo" size={16} color="white" />
-                                </Button>
+                        {lista.map((item, index) => (
+                            <FormTarefa item={item} index={index} key={index} />
+                        ))}
 
-                            </View>
+                        <View style={{ margin: 16 }}>
+                            <Button
+                                texto='Finalizar Tarefas'
+                                cor='#16be2e'
+                                line={20}
+                                onPress={() => {
+                                    if (lista.every(e => e?.file_url)) {
+                                        final()
+                                    }
+                                }}
+                                active={lista.every(e => e?.file_url)}
+                            >
+                                <AntDesign name="checkcircleo" size={16} color="white" />
+                            </Button>
+
+                        </View>
 
 
-                        </KeyboardAwareScrollView>
+                    </KeyboardAwareScrollView>
 
-                    </View>
-                </ImageBackground>
-            </View >
+                </View >
+            </BackgroundLayout>
         )
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-    },
-    image: {
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     card: {
         height: 500,
         padding: 16,

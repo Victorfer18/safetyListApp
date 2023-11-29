@@ -7,8 +7,7 @@ import { useEffect, useState, useCallback } from "react";
 import { alterStatusInspectionById, getInspectionsByClient } from 'services/api';
 import { Link } from "expo-router";
 import { setCompanyName } from '@/components/CurrentCompany';
-
-const image = 'assets/images/login/background.png';
+import BackgroundLayout from "@/components/BackgroundLayout";
 
 function formData(data: String) {
     let formatada = data?.substr(0, 10).split('-').reverse().join('/')
@@ -45,51 +44,44 @@ const inspections = () => {
             loadData();
             console.log(id)
         }, [id])
-
-
-
     );
 
-
     return (
-        <View style={style.container}>
+        <BackgroundLayout>
+            <Text style={style.tituloPage}>
+                Inspeções
+            </Text>
+            <ScrollView>
 
-            <ImageBackground source={require(image)} style={style.image}>
-                <Text style={style.tituloPage}>
-                    Inspeções
-                </Text>
-                <ScrollView>
+                {lista.map((e, i) => (
 
-                    {lista.map((e, i) => (
+                    <Card key={i}>
+                        <Text style={style.titulo}>{e.inspection_name}</Text>
+                        <Text style={style.paragrafo}>Criado em: {formData(e.date_created)}</Text>
+                        <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
 
-                        <Card key={i}>
-                            <Text style={style.titulo}>{e.inspection_name}</Text>
-                            <Text style={style.paragrafo}>Criado em: {formData(e.date_created)}</Text>
-                            <Text style={style.paragrafo}>Data estimada: {formData(e.date_estimated)}</Text>
-
-                            <Text style={style.paragrafo}>
-                                <Text style={style.b}> Status: &nbsp;</Text>
-                                <Text style={e.status_inspection == 1 ? style.statusNaoIniciado : style.statusIniciado}>
-                                    {e.status_inspection_desc}
-                                </Text>
+                        <Text style={style.paragrafo}>
+                            <Text style={style.b}> Status: &nbsp;</Text>
+                            <Text style={e.status_inspection == 1 ? style.statusNaoIniciado : style.statusIniciado}>
+                                {e.status_inspection_desc}
                             </Text>
-                            <Link href={{
-                                pathname: '/(stack)/tarefas/',
-                                params: { client_id: e.client_id, inspection_id: e.inspection_id, client_parent: e.client_parent, user_id: e.user_id, inspection_name: e.inspection_name, inspecao: id }
-                            }} onPress={() => setCompanyName(e.inspection_name)} asChild>
-                                <Button texto='Inspecionar' onPress={() => {
-                                    alterStatus(e.user_id, e.inspection_id, e.status_inspection)
-                                }} />
-                            </Link>
-                        </Card>
-                    ))}
-                    {
-                        lista.length == 0 && (<View style={style.msgInspecoes}><Text >Não há inspeções a serem realizadas para essa unidade!</Text></View>)
-                    }
-                </ScrollView>
-                <StatusBar style="dark" />
-            </ImageBackground>
-        </View >
+                        </Text>
+                        <Link href={{
+                            pathname: '/(stack)/tarefas/',
+                            params: { client_id: e.client_id, inspection_id: e.inspection_id, client_parent: e.client_parent, user_id: e.user_id, inspection_name: e.inspection_name, inspecao: id }
+                        }} onPress={() => setCompanyName(e.inspection_name)} asChild>
+                            <Button texto='Inspecionar' onPress={() => {
+                                alterStatus(e.user_id, e.inspection_id, e.status_inspection)
+                            }} />
+                        </Link>
+                    </Card>
+                ))}
+                {
+                    lista.length == 0 && (<View style={style.msgInspecoes}><Text >Não há inspeções a serem realizadas para essa unidade!</Text></View>)
+                }
+            </ScrollView>
+            <StatusBar style="dark" />
+        </BackgroundLayout>
     )
 }
 
