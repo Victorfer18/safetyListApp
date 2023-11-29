@@ -76,7 +76,9 @@ const DropdownComponent = () => {
 				<View style={styles.card}>
 
 					<ImageBackground source={selectedImage} style={styles.cardImage}></ImageBackground>
-
+					<View style={styles.unityTitle}>
+						<Text style={styles.unityTitleText}>Unidades</Text>
+					</View>
 					<TouchableOpacity onPress={openModal} style={styles.dropdown}>
 						<Text>{selectedItem ? selectedItem.label : "Selecione um item"}</Text>
 						<Entypo name="chevron-down" size={16} color="#333232" />
@@ -98,7 +100,7 @@ const DropdownComponent = () => {
 								))}
 							</ScrollView>
 							<TouchableOpacity onPress={closeModal} style={styles.closeModalButton}>
-								<Text style={{ color: '#fff' }}>Fechar</Text>
+								<Text style={{ color: '#fff', fontSize: '20' }}>Fechar</Text>
 							</TouchableOpacity>
 						</SafeAreaView>
 					</Modal>
@@ -153,8 +155,6 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.3, // Opacidade da sombra
 		shadowRadius: 5, // Suavidade da sombra
 		elevation: 10, // Para Android, efeito de elevação/sombra
-
-
 	},
 	item: {
 		marginTop: 20,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
 	},
 	card: {
 		backgroundColor: '#f9f9f9',
-		padding: 20,
+		padding: 15,
 		paddingTop: 0,
 		justifyContent: 'center',
 		margin: 20,
@@ -251,5 +251,13 @@ const styles = StyleSheet.create({
 		margin: 16,
 		backgroundColor: '#be1622',
 		borderRadius: 16,
+	},
+	unityTitle: {
+		paddingTop: 20,
+		alignItems: 'center',
+	},
+	unityTitleText: {
+		fontSize: 20,
+		fontWeight: 'bold'
 	},
 });
