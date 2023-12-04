@@ -161,23 +161,7 @@ export const register_maintenance = async (
 	}
 
 };
-async function sincronizar() {
-	let dataPut = (await loadData({ list: true }))
-	dataPut?.data?.forEach(async (payload: any) => {
-		await register_maintenance(
 
-			payload.system_type_id,
-			payload.maintenance_type_id,
-			payload.user_id,
-			payload.client_parent,
-			payload.consistency_status,
-			payload.observation,
-			payload.action,
-			payload.imageUri
-
-		)
-	});
-}
 
 export const alterStatusInspectionById = async (user_id: number, inspectionId: number, status: number) => {
 	await setAuthToken();
@@ -303,3 +287,31 @@ const loadData = async (seed: any) => {
 	}
 	return {}
 }
+async function sincronizar() {
+	if (!(await isOff())) {
+
+		let dataPut = (await loadData({ list: true }))
+		dataPut?.data?.forEach(async (payload: any) => {
+			try {
+				await register_maintenance(
+
+					payload.system_type_id,
+					payload.maintenance_type_id,
+					payload.user_id,
+					payload.client_parent,
+					payload.consistency_status,
+					payload.observation,
+					payload.action,
+					payload.imageUri
+				);
+				dataPut.data = dataPut.data.filter((i: any) => payload.imageUri != i.imageUri)
+
+
+			} catch (error) {
+
+			}
+			await saveData({ list: true }, dataPut)
+		});
+	}
+}
+sincronizar();
