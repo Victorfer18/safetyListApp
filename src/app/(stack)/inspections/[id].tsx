@@ -6,7 +6,7 @@ import { useSearchParams, useFocusEffect } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
 import { alterStatusInspectionById, getInspectionsByClient } from 'services/api';
 import { Link } from "expo-router";
-import { setCompanyName } from '@/components/CurrentCompany';
+import { setInspectionName } from '@/components/CurrentInspection';
 import BackgroundLayout from "@/components/BackgroundLayout";
 
 function formData(data: String) {
@@ -69,7 +69,7 @@ const inspections = () => {
                         <Link href={{
                             pathname: '/(stack)/tarefas/',
                             params: { client_id: e.client_id, inspection_id: e.inspection_id, client_parent: e.client_parent, user_id: e.user_id, inspection_name: e.inspection_name, inspecao: id }
-                        }} onPress={() => setCompanyName(e.inspection_name)} asChild>
+                        }} onPress={() => setInspectionName(e.inspection_name)} asChild>
                             <Button texto='Inspecionar' onPress={() => {
                                 alterStatus(e.user_id, e.inspection_id, e.status_inspection)
                             }} />

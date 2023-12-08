@@ -52,6 +52,7 @@ function FormTarefa({ item, index }: any) {
     }, [local?.photoUri]);
 
     async function saveTarefa(e: any) {
+        console.log("Save Tafarel", e);
         setLoad(true)
         try {
             const dado = await jwt()
@@ -65,7 +66,10 @@ function FormTarefa({ item, index }: any) {
                 inputValue1,
                 inputValue2,
                 photoUri,
-            )
+                local.inspection_id
+            );
+            console.log("Tafarel", res);
+
             setTimeout(() => {
                 setMessage(res.message);
                 setMessageType("success");
@@ -73,8 +77,8 @@ function FormTarefa({ item, index }: any) {
 
                 setTimeout(() => {
                     setMessage('')
-                    setLoad(false);
                 }, 10000)
+                setLoad(false);
             }, 2000);
 
 
@@ -86,8 +90,8 @@ function FormTarefa({ item, index }: any) {
 
                 setTimeout(() => {
                     setMessage('')
-                    setLoad(false);
                 }, 10000)
+                setLoad(false);
             }, 2000);
 
         }

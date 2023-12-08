@@ -108,7 +108,8 @@ export const register_maintenance = async (
 	consistency_status: any,
 	observation: any,
 	action: any,
-	imageUri: any
+	imageUri: any,
+	inspection_id: any
 ) => {
 	await setAuthToken();
 
@@ -125,11 +126,24 @@ export const register_maintenance = async (
 			consistency_status,
 			observation,
 			action,
-			imageUri
+			imageUri,
+			inspection_id
 		})
+
 		await saveData({ list: true }, dataPut)
 
 	}
+	console.log({
+		system_type_id,
+		maintenance_type_id,
+		user_id,
+		client_parent,
+		consistency_status,
+		observation,
+		action,
+		imageUri,
+		inspection_id
+	})
 	try {
 		const file = await fetch(imageUri);
 		const theBlob = await file.blob();
@@ -147,6 +161,7 @@ export const register_maintenance = async (
 		form.append('observation', observation);
 		form.append('action', action);
 		form.append('image', theBlob);
+		form.append('inspection_id', inspection_id);
 		const response = await axiosInstance.post('/inspections/register_maintenance', form, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
@@ -302,7 +317,8 @@ async function sincronizar() {
 					payload.consistency_status,
 					payload.observation,
 					payload.action,
-					payload.imageUri
+					payload.imageUri,
+					payload.inspection_id
 				);
 				dataPut.data = dataPut.data.filter((i: any) => payload.imageUri != i.imageUri)
 

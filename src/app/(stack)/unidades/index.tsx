@@ -16,7 +16,7 @@ import Button from "components/Button";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import jwt from "@/services/jwt";
 import { Link } from "expo-router";
-import { setCompanyName } from "@/components/CurrentCompany";
+import { setInspectionName } from "@/components/CurrentInspection";
 import BackgroundLayout from "@/components/BackgroundLayout";
 
 const defaultImage = {
@@ -121,7 +121,7 @@ const DropdownComponent = () => {
 				{!!value ? (
 					<Link
 						href={"/(stack)/inspections/" + value}
-						onPress={() => setCompanyName(name)}
+						onPress={() => setInspectionName(name)}
 						asChild
 					>
 						<Button texto="Prosseguir" line={16} marginTop={16}>

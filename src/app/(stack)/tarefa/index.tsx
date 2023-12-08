@@ -11,10 +11,12 @@ import CustomInput from '@/components/CustomInput';
 import jwt from "@/services/jwt";
 import FormTarefa from "@/components/FormTarefa";
 import MessageDisplay from "@/components/feedBack";
-import CurrentCompany from '@/components/CurrentCompany';
+import CurrentCompany from '@/components/CurrentInspection';
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BackgroundLayout from "@/components/BackgroundLayout";
+import CurrentType from "@/components/CurrentType";
+
 
 
 const App = ({ ...params }: any) => {
@@ -37,6 +39,7 @@ const App = ({ ...params }: any) => {
             setIsLoading(true);
             const res = await get_maintenance_type(local.system_type_id, local.client_id);
             const res2 = await get_maintenance(local.system_id);
+            console.log(res.payload.length)
             const margin = res.payload.map(e => {
                 let exist = res2.payload.find(i => e.maintenance_type_name == i.maintenance_type_name)
                 if (exist) {
@@ -87,10 +90,9 @@ const App = ({ ...params }: any) => {
 
                 <View style={{ flex: 1 }}>
                     <CurrentCompany />
+
                     <KeyboardAwareScrollView extraScrollHeight={100} >
-
-                        <Text style={styles.tituloPage}>Tarefa</Text>
-
+                        <CurrentType />
                         {lista.map((item, index) => (
                             <FormTarefa item={item} index={index} key={index} />
                         ))}

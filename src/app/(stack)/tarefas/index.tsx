@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, ImageBackground } from "react-native";
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, ImageBackground, ActivityIndicator } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getInspectableList, saveInspectableIsClosed, alterStatusInspectionById } from 'services/api';
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import CardTarefas from "@/components/CardTarefas";
@@ -9,59 +9,69 @@ import Button from 'components/Button'
 import { StatusBar } from "expo-status-bar";
 import HeaderTitle from "@/components/HeaderTitle";
 
-import CurrentCompany from '@/components/CurrentCompany';
+import CurrentCompany from '@/components/CurrentInspection';
 import BackgroundLayout from "@/components/BackgroundLayout";
 
-
-
-
 const tarefas = () => {
-
     const local = useLocalSearchParams();
-    const [lista, setLista] = useState([])
+    const [lista, setLista] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const loadData = async () => {
+        setIsLoading(true);
+        try {
+            const res = await getInspectableList(local.inspection_id, local.client_id);
+            setLista(res.payload);
+        } catch (error) {
+            console.error("Erro ao carregar a lista de tarefas:", error);
+        }
+        setIsLoading(false);
+    };
 
     useEffect(() => {
-        (async () => {
+        loadData();
+    }, []);
 
-            const res = await getInspectableList(local.inspection_id, local.client_id);
+    useFocusEffect(
+        useCallback(() => {
+            loadData();
+        }, [local.inspection_id, local.client_id])
+    );
 
-            setLista(res.payload)
-        })()
-    }, [])
     async function alterStatus() {
         if (lista.every(m => m.is_closed == 1)) {
-            await alterStatusInspectionById(local.user_id, local.inspection_id, 3)
+            await alterStatusInspectionById(local.user_id, local.inspection_id, 3);
             router.push({ pathname: '/(stack)/inspections/' + local.inspection_id });
         }
     };
 
     return (
-        <BackgroundLayout>
-            <ScrollView>
-
-                <CurrentCompany />
-
-                <CardTarefas style={style} lista={lista} />
-
-                <View style={style.boxSpace}>
-                    {
-                        lista.length == 0 && (<Text style={style.msgTarefas}>Não há tarefas a serem realizadas para essa inspeção!</Text>)
-                    }
-                    {
-                        lista.length > 0 && (<Button onPress={alterStatus} texto='Finalizar Tarefas' cor='#16be2e' line={20} active={lista.every(m => m.is_closed == 1)}>
-                            <AntDesign name="checkcircleo" size={16} color="white" />
-                        </Button>)
-                    }
-                </View>
-
-
-                <StatusBar style="dark" />
-
-            </ScrollView >
-        </BackgroundLayout>
-
-    )
-}
+        isLoading ? (
+            <View style={style.loadingContainer} >
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text style={style.loadingText}>Carregando...</Text>
+            </View >
+        ) : (
+            <BackgroundLayout>
+                <ScrollView>
+                    <CurrentCompany />
+                    <CardTarefas style={style} lista={lista} />
+                    <View style={style.boxSpace}>
+                        {
+                            lista.length == 0 && (<Text style={style.msgTarefas}>Não há tarefas a serem realizadas para essa inspeção!</Text>)
+                        }
+                        {
+                            lista.length > 0 && (<Button onPress={alterStatus} texto='Finalizar Tarefas' cor='#16be2e' line={20} active={lista.every(m => m.is_closed == 1)}>
+                                <AntDesign name="checkcircleo" size={16} color="white" />
+                            </Button>)
+                        }
+                    </View>
+                    <StatusBar style="dark" />
+                </ScrollView>
+            </BackgroundLayout>
+        )
+    );
+};
 
 export default tarefas;
 
@@ -112,7 +122,6 @@ const style = StyleSheet.create(
             color: '#f7f7f7',
             fontSize: 16,
             textAlign: "center",
-            //backgroundColor: '#0002',
             padding: 12,
         },
 
@@ -134,6 +143,16 @@ const style = StyleSheet.create(
             margin: 16,
             borderRadius: 16,
 
-        }
+        },
+        loadingContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        loadingText: {
+            marginTop: 10,
+            fontSize: 16,
+            color: 'gray',
+        },
     }
 )
