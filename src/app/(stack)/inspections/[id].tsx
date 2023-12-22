@@ -23,12 +23,6 @@ function formData(data: String) {
   return formatada == "00/00/0000" ? " - " : formatada;
 }
 
-function alterStatus(user_id, inspection_id, status_inspection) {
-  if (status_inspection == 1) {
-    alterStatusInspectionById(user_id, inspection_id, 2);
-  }
-}
-
 const inspections = () => {
   const { id } = useSearchParams();
   const [lista, setLista] = useState([]);
@@ -50,7 +44,6 @@ const inspections = () => {
   useFocusEffect(
     useCallback(() => {
       loadData();
-      //console.log(id);
     }, [id])
   );
 
@@ -91,18 +84,14 @@ const inspections = () => {
                   client_parent: e.client_parent,
                   user_id: e.user_id,
                   inspection_name: e.inspection_name,
+                  status_inspection: parseInt(e.status_inspection),
                   inspecao: id,
                 },
               }}
               onPress={() => setInspectionName(e.inspection_name)}
               asChild
             >
-              <Button
-                texto="Inspecionar"
-                onPress={() => {
-                  alterStatus(e.user_id, e.inspection_id, e.status_inspection);
-                }}
-              />
+              <Button texto="Inspecionar" />
             </Link>
           </Card>
         ))}

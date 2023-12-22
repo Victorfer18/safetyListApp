@@ -20,9 +20,7 @@ import Button from "components/Button";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
-  get_maintenance_type,
   get_maintenance,
-  register_maintenance,
   saveInspectableIsClosed,
 } from "services/api";
 import CustomInput from "@/components/CustomInput";
@@ -53,14 +51,13 @@ const App = ({ ...params }: any) => {
     (async () => {
       setIsLoading(true);
 
-      const res = await get_maintenance(local.system_type_id, local.client_id);
-      // console.log(local.system_type_id, local.client_id);
+      const res = await get_maintenance(local.system_type_id, local.client_id, local.sector_area_pavement_id);
 
       setLista(res.payload.maintenances);
 
       setResposta(res.payload.maintenances);
       setIsLoading(false);
-      console.log(res.payload.maintenances);
+
     })();
   }, []);
 

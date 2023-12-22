@@ -14,7 +14,7 @@ import Card from "@/components/Card";
 import Button from "components/Button";
 import { Link, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { register_maintenance } from "services/api";
+import { alterStatusInspectionById, register_maintenance } from "services/api";
 import CustomInput from "@/components/CustomInput";
 import jwt from "@/services/jwt";
 import MessageDisplay from "@/components/feedBack";
@@ -48,11 +48,10 @@ function FormTarefa({ item, index }: any) {
         setPhotoUri(local?.photoUri);
       }
     }
-
     if (item?.file_url) {
-      setSelectedRadio(item.is_according ? 1 : 0);
-      setInputValue1(item?.observation || "");
-      setInputValue2(item?.action || "");
+      setSelectedRadio(item.is_according == 1 ? 0 : 1);
+      setInputValue1(item?.observation);
+      setInputValue2(item?.action);
     }
   }, [local?.photoUri]);
 
@@ -89,7 +88,6 @@ function FormTarefa({ item, index }: any) {
         local.inspection_id,
         e.sys_app_maintenances_id
       );
-      console.log("Tafarel", res);
 
       setTimeout(() => {
         setMessage(res.message);
@@ -117,6 +115,9 @@ function FormTarefa({ item, index }: any) {
 
   async function renderSaveTarefa() {
     if (!item?.file_url) {
+      if (parseInt(local.status_inspection) == 1) {
+        await alterStatusInspectionById(local.user_id, local.inspection_id, 2);
+      }
       saveTarefa(item);
     }
   }
@@ -206,7 +207,7 @@ function FormTarefa({ item, index }: any) {
             placeholder="Ações a serem tomadas"
             value={inputValue2}
             onChangeText={(text) => {
-              if (!item?.file_url) setInputValue2(text || "");
+              if (!item?.file_url) setInputValue2(text);
             }}
           />
         )}
