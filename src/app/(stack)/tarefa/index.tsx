@@ -60,7 +60,7 @@ const App = ({ ...params }: any) => {
 
       setResposta(res.payload.maintenances);
       setIsLoading(false);
-      console.log(res.payload.maintenances)
+      console.log(res.payload.maintenances);
     })();
   }, []);
 
@@ -107,26 +107,35 @@ const App = ({ ...params }: any) => {
 
         <KeyboardAwareScrollView extraScrollHeight={100}>
           <CurrentType />
+          {lista.length === 0 ? (
+            <View style={styles.boxSpace}>
+              <Text style={styles.msgTarefas}>
+                Não há tarefa a serem realizadas para este sistema!
+              </Text>
+            </View>
+          ) : (
+            <>
+              {lista.map((item, index) => (
+                <FormTarefa item={item} index={index} key={index} />
+              ))}
 
-          {lista.map((item, index) => (
-            <FormTarefa item={item} index={index} key={index} />
-          ))}
-
-          <View style={{ margin: 16 }}>
-            <Button
-              texto="Finalizar Tarefas"
-              cor="#16be2e"
-              line={20}
-              onPress={() => {
-                if (lista.every((e) => e?.file_url)) {
-                  final();
-                }
-              }}
-              active={lista.every((e) => e?.file_url)}
-            >
-              <AntDesign name="checkcircleo" size={16} color="white" />
-            </Button>
-          </View>
+              <View style={{ margin: 16 }}>
+                <Button
+                  texto="Finalizar Tarefas"
+                  cor="#16be2e"
+                  line={20}
+                  onPress={() => {
+                    if (lista.every((e) => e?.file_url)) {
+                      final();
+                    }
+                  }}
+                  active={lista.every((e) => e?.file_url)}
+                >
+                  <AntDesign name="checkcircleo" size={16} color="white" />
+                </Button>
+              </View>
+            </>
+          )}
         </KeyboardAwareScrollView>
       </View>
     </BackgroundLayout>
@@ -145,6 +154,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     margin: 16,
+  },
+  boxSpace: {
+    margin: 18,
+    borderRadius: 10,
+    padding: 16,
+    textAlign: "center",
+    backgroundColor: "#ccc",
+    color: "#555",
+  },
+  msgTarefas: {
+    fontSize: 24,
   },
   btnArea: {
     flex: 1,
