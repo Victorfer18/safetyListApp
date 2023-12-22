@@ -52,26 +52,15 @@ const App = ({ ...params }: any) => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const res = await get_maintenance_type(
-        local.system_type_id,
-        local.client_id
-      );
-      const res2 = await get_maintenance(local.system_id);
-      console.log(res.payload.length);
-      const margin = res.payload.map((e) => {
-        let exist = res2.payload.find(
-          (i) => e.maintenance_type_name == i.maintenance_type_name
-        );
-        if (exist) {
-          e = { ...exist, ...e };
-        }
-        return e;
-      });
 
-      setLista(margin);
+      const res = await get_maintenance(local.system_type_id, local.client_id);
+      // console.log(local.system_type_id, local.client_id);
 
-      setResposta(res2.payload);
+      setLista(res.payload.maintenances);
+
+      setResposta(res.payload.maintenances);
       setIsLoading(false);
+      console.log(res.payload.maintenances)
     })();
   }, []);
 

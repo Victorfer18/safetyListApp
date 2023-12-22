@@ -20,7 +20,7 @@ import CardTarefas from "@/components/CardTarefas";
 import Button from "components/Button";
 import { StatusBar } from "expo-status-bar";
 import HeaderTitle from "@/components/HeaderTitle";
-
+import HeaderTitlePages from "@/components/HeaderTitlePages";
 import CurrentCompany from "@/components/CurrentInspection";
 import BackgroundLayout from "@/components/BackgroundLayout";
 
@@ -69,9 +69,7 @@ const tarefas = () => {
     <BackgroundLayout>
       <ScrollView>
         <CurrentCompany />
-        <View style={style.boxTituloPage}>
-          <Text style={style.tituloPage}>Sistemas</Text>
-        </View>
+        <HeaderTitlePages title="Sistemas" />
         <CardTarefas style={style} lista={lista} />
         <View>
           {lista.length == 0 && (

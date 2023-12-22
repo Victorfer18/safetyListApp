@@ -15,6 +15,7 @@ const CustomInput: React.ForwardRefRenderFunction<TextInput, CustomInputProps> =
     { value, onChangeText, placeholder, secureTextEntry, iconName, ...props },
     ref
 ) => {
+
     return (
 
         <View style={styles.container}>
@@ -24,7 +25,7 @@ const CustomInput: React.ForwardRefRenderFunction<TextInput, CustomInputProps> =
                 ref={ref}
                 style={styles.input}
                 onChangeText={onChangeText}
-                value={value}
+                value={`${value}`}
                 placeholder={placeholder}
                 secureTextEntry={secureTextEntry}
                 placeholderTextColor="#aaa"

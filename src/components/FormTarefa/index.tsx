@@ -51,8 +51,8 @@ function FormTarefa({ item, index }: any) {
 
     if (item?.file_url) {
       setSelectedRadio(item.is_according ? 1 : 0);
-      setInputValue1(item?.observation);
-      setInputValue2(item?.action);
+      setInputValue1(item?.observation || "");
+      setInputValue2(item?.action || "");
     }
   }, [local?.photoUri]);
 
@@ -86,7 +86,8 @@ function FormTarefa({ item, index }: any) {
         inputValue1,
         inputValue2,
         photoUri,
-        local.inspection_id
+        local.inspection_id,
+        e.sys_app_maintenances_id
       );
       console.log("Tafarel", res);
 
@@ -205,7 +206,7 @@ function FormTarefa({ item, index }: any) {
             placeholder="Ações a serem tomadas"
             value={inputValue2}
             onChangeText={(text) => {
-              if (!item?.file_url) setInputValue2(text);
+              if (!item?.file_url) setInputValue2(text || "");
             }}
           />
         )}

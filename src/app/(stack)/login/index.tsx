@@ -8,11 +8,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { login } from 'services/api';
 import Button from '@/components/Button';
 import { router } from 'expo-router';
+import NetInfo from '@react-native-community/netinfo';
 
 const image = 'assets/images/login/background.png';
 const logoImage1 = 'assets/images/logo/safety-list.png';
 const logoImage2 = 'assets/images/logo/safety-2u.png';
-
 
 const App = () => {
     const [username, setUsername] = useState('');
@@ -20,6 +20,15 @@ const App = () => {
     const [load, setLoad] = useState(false);
     const [message, setMessage] = useState('');
     const passwordInputRef = useRef<TextInput>(null);
+    const [isConnected, setIsConnected] = useState(true);
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsConnected(state.isConnected);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
         (async () => {
