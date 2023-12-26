@@ -49,13 +49,14 @@ function FormTarefa({ item, index }: any) {
       }
     }
     if (item?.file_url) {
-      setSelectedRadio(item.is_according == 1 ? 1 : 0);
+      setSelectedRadio(item.is_according == 1 ? 0 : 1);
       setInputValue1(item?.observation);
       setInputValue2(item?.action);
     }
   }, [local?.photoUri]);
 
   async function saveTarefa(e: any) {
+    console.log("Save Tafarel", e);
     setLoad(true);
     if (
       !photoUri ||
