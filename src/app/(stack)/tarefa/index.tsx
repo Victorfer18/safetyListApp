@@ -55,7 +55,9 @@ const App = ({ ...params }: any) => {
         local.client_id,
         local.sector_area_pavement_id
       );
-
+      console.log("====================================");
+      console.log(res.payload.maintenances);
+      console.log("====================================");
       setLista(res.payload.maintenances);
       setValidButton(res.payload.allClosed);
       setResposta(res.payload.maintenances);

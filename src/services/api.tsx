@@ -113,7 +113,6 @@ export const saveInspectableIsClosed = async (
       "/inspections/set_is_closed",
       requestBody
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error("Erro ao salvar inspecao como fechada");
@@ -188,15 +187,13 @@ export const register_maintenance = async (
     form.append("maintenance_type_id", maintenance_type_id);
     form.append("user_id", user_id);
     form.append("client_parent", client_parent);
-    form.append("consistency_status", consistency_status ? "1" : "0");
+    form.append("consistency_status", consistency_status ? "0" : "1");
     form.append("observation", observation);
     form.append("action", action);
     form.append("image", theBlob);
     form.append("inspection_id", inspection_id);
     form.append("sys_app_maintenances_id", sys_app_maintenances_id);
-    console.log("====================================");
     console.log(form);
-    console.log("====================================");
     const response = await axiosInstance.post(
       "/inspections/register_maintenance",
       form,

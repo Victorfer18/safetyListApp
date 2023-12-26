@@ -49,14 +49,13 @@ function FormTarefa({ item, index }: any) {
       }
     }
     if (item?.file_url) {
-      setSelectedRadio(item.is_according == 1 ? 0 : 1);
+      setSelectedRadio(item.is_according == 1 ? 1 : 0);
       setInputValue1(item?.observation);
       setInputValue2(item?.action);
     }
   }, [local?.photoUri]);
 
   async function saveTarefa(e: any) {
-    console.log("Save Tafarel", e);
     setLoad(true);
     if (
       !photoUri ||
@@ -81,13 +80,14 @@ function FormTarefa({ item, index }: any) {
         e.maintenance_type_id,
         local.user_id,
         local.client_parent,
-        selectedRadio == 0,
+        selectedRadio == 1,
         inputValue1,
         inputValue2,
         photoUri,
         local.inspection_id,
         e.sys_app_maintenances_id
       );
+
       setTimeout(() => {
         setMessage(res.message);
         setMessageType("success");
