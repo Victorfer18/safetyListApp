@@ -37,20 +37,18 @@ const tarefas = () => {
         local.inspection_id,
         local.client_id
       );
-      console.log(res.payload.inspecTables)
+      console.log(res.payload.inspecTables);
       setLista(res.payload.inspecTables);
       if (res.payload.allClosed) {
-        // await saveSectorIsClosed(
-        //   local.sector_area_pavement_id,
-        //   local.inspection_id
-        // );
+        await saveSectorIsClosed(
+          local.sector_area_pavement_id,
+          local.inspection_id
+        );
       }
-
     } catch (error) {
       console.error("Erro ao carregar a lista de tarefas:", error);
     }
     setIsLoading(false);
-
   };
 
   useEffect(() => {

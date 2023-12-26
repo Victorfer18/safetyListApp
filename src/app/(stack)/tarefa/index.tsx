@@ -72,11 +72,11 @@ const App = ({ ...params }: any) => {
           {
             text: "OK",
             onPress: () => {
-              // saveInspectableIsClosed(
-              //   local.client_parent,
-              //   local.inspection_id,
-              //   local.system_type_id
-              // );
+              saveInspectableIsClosed(
+                local.client_parent,
+                local.inspection_id,
+                local.system_type_id
+              );
               router.push({
                 pathname: "/(stack)/tarefas/",
                 params: {
@@ -93,7 +93,7 @@ const App = ({ ...params }: any) => {
                 local.client_parent,
                 local.inspection_id,
                 local.system_type_id
-              )
+              );
             },
           },
         ],
