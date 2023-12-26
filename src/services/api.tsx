@@ -113,11 +113,14 @@ export const saveInspectableIsClosed = async (
       "/inspections/set_is_closed",
       requestBody
     );
+    console.log(response.data)
     return response.data;
+
   } catch (error) {
     throw new Error("Erro ao salvar inspecao como fechada");
   }
 };
+
 
 export const saveSectorIsClosed = async (
   sector_area_pavement_id: number,
@@ -375,7 +378,7 @@ async function sincronizar() {
         dataPut.data = dataPut.data.filter(
           (i: any) => payload.imageUri != i.imageUri
         );
-      } catch (error) {}
+      } catch (error) { }
       await saveData({ list: true }, dataPut);
     });
   }

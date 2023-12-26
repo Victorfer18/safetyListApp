@@ -39,7 +39,7 @@ const App = ({ ...params }: any) => {
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [messageType, setMessageType] = useState("error");
-
+  const [ValidButton, setValidButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const local = useLocalSearchParams();
@@ -57,14 +57,14 @@ const App = ({ ...params }: any) => {
       );
 
       setLista(res.payload.maintenances);
-
+      setValidButton(res.payload.allClosed);
       setResposta(res.payload.maintenances);
       setIsLoading(false);
     })();
   }, []);
 
   function final() {
-    if (lista.every((e) => e?.file_url)) {
+    if (ValidButton) {
       Alert.alert(
         "Tarefa Completa",
         "Tarefas finalizadas com sucesso!",
@@ -72,14 +72,28 @@ const App = ({ ...params }: any) => {
           {
             text: "OK",
             onPress: () => {
-              saveInspectableIsClosed(
+              // saveInspectableIsClosed(
+              //   local.client_parent,
+              //   local.inspection_id,
+              //   local.system_type_id
+              // );
+              router.push({
+                pathname: "/(stack)/tarefas/",
+                params: {
+                  client_id: local.client_parent,
+                  inspection_id: local.inspection_id,
+                  sector_area_pavement_id: local.sector_area_pavement_id,
+                  inspection_name: local.inspection_name,
+                  inspecao: local.inspecao,
+                  status_inspection: local.status_inspection,
+                  user_id: local.user_id,
+                },
+              });
+              console.log(
                 local.client_parent,
                 local.inspection_id,
                 local.system_type_id
-              );
-              router.push({
-                pathname: `/(stack)/tarefas/`,
-              });
+              )
             },
           },
         ],
@@ -124,11 +138,11 @@ const App = ({ ...params }: any) => {
                   cor="#16be2e"
                   line={20}
                   onPress={() => {
-                    if (lista.every((e) => e?.file_url)) {
+                    if (ValidButton) {
                       final();
                     }
                   }}
-                  active={lista.every((e) => e?.file_url)}
+                  active={ValidButton}
                 >
                   <AntDesign name="checkcircleo" size={16} color="white" />
                 </Button>

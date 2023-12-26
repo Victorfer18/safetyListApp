@@ -72,9 +72,8 @@ const setores = () => {
                 </View>
                 <Link
                   href={{
-                    pathname: `/(stack)/${
-                      e.is_closed === 0 ? "tarefas" : "setores"
-                    }/`,
+                    pathname: `/(stack)/${e.is_closed === 0 ? "tarefas" : "setores"
+                      }/`,
                     params: {
                       client_id: local.client_id,
                       inspection_id: local.inspection_id,
@@ -86,7 +85,17 @@ const setores = () => {
                       user_id: local.user_id,
                     },
                   }}
-                  // onPress={() => setInspectionName(e.fullSectorName)}
+                  onPress={() => console.log({
+                    client_id: local.client_id,
+                    inspection_id: local.inspection_id,
+                    client_parent: local.client_parent,
+                    sector_area_pavement_id: e.sector_area_pavement_id,
+                    inspection_name: local.inspection_name,
+                    inspecao: id,
+                    status_inspection: local.status_inspection,
+                    user_id: local.user_id,
+
+                  })}
                   asChild
                 >
                   <Button
