@@ -81,14 +81,13 @@ function FormTarefa({ item, index }: any) {
         e.maintenance_type_id,
         local.user_id,
         local.client_parent,
-        selectedRadio == 1,
+        selectedRadio == 0,
         inputValue1,
         inputValue2,
         photoUri,
         local.inspection_id,
         e.sys_app_maintenances_id
       );
-
       setTimeout(() => {
         setMessage(res.message);
         setMessageType("success");

@@ -193,7 +193,9 @@ export const register_maintenance = async (
     form.append("image", theBlob);
     form.append("inspection_id", inspection_id);
     form.append("sys_app_maintenances_id", sys_app_maintenances_id);
+    console.log("====================================");
     console.log(form);
+    console.log("====================================");
     const response = await axiosInstance.post(
       "/inspections/register_maintenance",
       form,
