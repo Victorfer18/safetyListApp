@@ -53,7 +53,8 @@ const App = ({ ...params }: any) => {
       const res = await get_maintenance(
         local.system_type_id,
         local.client_id,
-        local.sector_area_pavement_id
+        local.sector_area_pavement_id,
+        local.inspection_id
       );
       console.log("====================================");
       console.log(res.payload.maintenances);

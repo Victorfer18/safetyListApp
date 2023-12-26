@@ -261,13 +261,15 @@ export const validateJwt = async (clientId: number) => {
 export const get_maintenance = async (
   system_type_id: number,
   client_id: number,
-  sector_area_pavement_id: number
+  sector_area_pavement_id: number,
+  inspection_id: number
 ) => {
   try {
     const requestBody = {
       system_type_id,
       client_id,
       sector_area_pavement_id,
+      inspection_id,
     };
     const response = await axiosInstance.post(
       "/inspections/get_maintenance",
