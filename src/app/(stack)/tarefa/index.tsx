@@ -19,10 +19,7 @@ import Card from "@/components/Card";
 import Button from "components/Button";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import {
-  get_maintenance,
-  saveInspectableIsClosed,
-} from "services/api";
+import { get_maintenance, saveInspectableIsClosed } from "services/api";
 import CustomInput from "@/components/CustomInput";
 import jwt from "@/services/jwt";
 import FormTarefa from "@/components/FormTarefa";
@@ -32,6 +29,8 @@ import CurrentCompany from "@/components/CurrentInspection";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import BackgroundLayout from "@/components/BackgroundLayout";
 import CurrentType from "@/components/CurrentType";
+import CurrentInspection from "@/components/CurrentInspection";
+import CurrentSetores from "@/components/CurrentSetores";
 
 const App = ({ ...params }: any) => {
   const [lista, setLista] = useState([]);
@@ -51,13 +50,16 @@ const App = ({ ...params }: any) => {
     (async () => {
       setIsLoading(true);
 
-      const res = await get_maintenance(local.system_type_id, local.client_id, local.sector_area_pavement_id);
+      const res = await get_maintenance(
+        local.system_type_id,
+        local.client_id,
+        local.sector_area_pavement_id
+      );
 
       setLista(res.payload.maintenances);
 
       setResposta(res.payload.maintenances);
       setIsLoading(false);
-
     })();
   }, []);
 
@@ -76,7 +78,7 @@ const App = ({ ...params }: any) => {
                 local.system_type_id
               );
               router.push({
-                pathname: `/(stack)/inspections/${local?.inspecao}`,
+                pathname: `/(stack)/tarefas/`,
               });
             },
           },
@@ -100,8 +102,8 @@ const App = ({ ...params }: any) => {
   ) : (
     <BackgroundLayout>
       <View style={{ flex: 1 }}>
-        <CurrentCompany />
-
+        <CurrentInspection />
+        <CurrentSetores />
         <KeyboardAwareScrollView extraScrollHeight={100}>
           <CurrentType />
           {lista.length === 0 ? (

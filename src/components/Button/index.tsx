@@ -5,7 +5,7 @@ type Props = TouchableOpacityProps
 
 const Button = forwardRef<TouchableOpacity, Props>(({
     texto, cor = '#be1622', children, line = 10, width = '100%',
-    marginTop = 20, marginLeft = 0, fn = () => false,
+    marginTop = 20, marginLeft = 0, marginRight = 0, fn = () => false,
     load = false,
     active = true,
     ...rest
@@ -21,6 +21,7 @@ const Button = forwardRef<TouchableOpacity, Props>(({
             justifyContent: 'center',
             width,
             marginLeft,
+            marginRight,
 
         },
         buttonText: {

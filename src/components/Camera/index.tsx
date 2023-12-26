@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, AntDesign } from '@expo/vector-icons';
 
 const CameraComponent = ({ onClose, onSave }) => {
     let cameraRef = useRef();
@@ -58,6 +58,11 @@ const CameraComponent = ({ onClose, onSave }) => {
                 </View>
             ) : (
                 <Camera style={styles.camera} ref={cameraRef}>
+                    <View style={styles.closeButtonContainer}>
+                        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+                            <AntDesign name="close" size={30} color="white" />
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.button} onPress={takePicture}>
                             <FontAwesome name="camera" size={40} color="white" />
@@ -77,6 +82,17 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    closeButtonContainer: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        zIndex: 10,
+    },
+    closeButton: {
+        backgroundColor: '#333',
+        padding: 10,
+        borderRadius: 20,
     },
     previewContainer: {
         flex: 1,

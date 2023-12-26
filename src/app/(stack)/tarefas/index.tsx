@@ -12,21 +12,23 @@ import { useEffect, useState, useCallback } from "react";
 import {
   getInspectableList,
   saveInspectableIsClosed,
-  alterStatusInspectionById,
+  saveSectorIsClosed,
 } from "services/api";
 import { router, useLocalSearchParams, useFocusEffect } from "expo-router";
 import CardTarefas from "@/components/CardTarefas";
 
 import Button from "components/Button";
 import { StatusBar } from "expo-status-bar";
-import HeaderTitle from "@/components/HeaderTitle";
 import HeaderTitlePages from "@/components/HeaderTitlePages";
 import CurrentCompany from "@/components/CurrentInspection";
 import BackgroundLayout from "@/components/BackgroundLayout";
+import CurrentInspection from "@/components/CurrentInspection";
+import CurrentSetores from "@/components/CurrentSetores";
 
 const tarefas = () => {
   const local = useLocalSearchParams();
   const [lista, setLista] = useState([]);
+  const [ValidButton, setValidButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadData = async () => {
@@ -36,7 +38,13 @@ const tarefas = () => {
         local.inspection_id,
         local.client_id
       );
-      setLista(res.payload);
+      setLista(res.payload.inspecTables);
+      if (res.payload.allClosed) {
+        await saveSectorIsClosed(
+          local.sector_area_pavement_id,
+          local.inspection_id
+        );
+      }
     } catch (error) {
       console.error("Erro ao carregar a lista de tarefas:", error);
     }
@@ -53,13 +61,6 @@ const tarefas = () => {
     }, [local.inspection_id, local.client_id])
   );
 
-  async function alterStatus() {
-    if (lista.every((m) => m.is_closed == 1)) {
-      await alterStatusInspectionById(local.user_id, local.inspection_id, 3);
-      router.push({ pathname: "/(stack)/inspections/" + local.inspection_id });
-    }
-  }
-
   return isLoading ? (
     <View style={style.loadingContainer}>
       <ActivityIndicator size="large" color="#0000ff" />
@@ -68,7 +69,8 @@ const tarefas = () => {
   ) : (
     <BackgroundLayout>
       <ScrollView>
-        <CurrentCompany />
+        <CurrentInspection />
+        <CurrentSetores />
         <HeaderTitlePages title="Sistemas" />
         <CardTarefas style={style} lista={lista} />
         <View>
@@ -77,19 +79,6 @@ const tarefas = () => {
               <Text style={style.msgTarefas}>
                 Não há tarefas a serem realizadas para essa inspeção!
               </Text>
-            </View>
-          )}
-          {lista.length > 0 && (
-            <View style={style.boxSpacefinish}>
-              <Button
-                onPress={alterStatus}
-                texto="Finalizar Tarefas"
-                cor="#16be2e"
-                line={20}
-                active={lista.every((m) => m.is_closed == 1)}
-              >
-                <AntDesign name="checkcircleo" size={16} color="white" />
-              </Button>
             </View>
           )}
         </View>

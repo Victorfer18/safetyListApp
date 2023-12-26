@@ -5,8 +5,8 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
-import Button from "../../../components/Button";
-import Card from "../../../components/Card";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
 import { StatusBar } from "expo-status-bar";
 import { useSearchParams, useFocusEffect } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
@@ -88,10 +88,13 @@ const inspections = () => {
                   inspecao: id,
                 },
               }}
-              onPress={() => setInspectionName(e.inspection_name)}
               asChild
             >
-              <Button texto="Inspecionar" />
+              <Button
+                texto="Inspecionar"
+                onPress={() => setInspectionName(e.inspection_name)}
+                asChild
+              />
             </Link>
           </Card>
         ))}

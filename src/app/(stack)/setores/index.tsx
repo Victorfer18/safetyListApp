@@ -1,51 +1,45 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  ImageBackground,
-} from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
 import { StatusBar } from "expo-status-bar";
 import {
   useSearchParams,
+  router,
   useFocusEffect,
   useLocalSearchParams,
 } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
 import {
   alterStatusInspectionById,
-  getInspectionsByClient,
   getSectorsByIdInspection,
 } from "services/api";
 import { Link } from "expo-router";
-import { setInspectionName } from "@/components/CurrentInspection";
+
 import BackgroundLayout from "@/components/BackgroundLayout";
 import HeaderTitlePages from "@/components/HeaderTitlePages";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CurrentInspection from "@/components/CurrentInspection";
+import { setSetoresName } from "@/components/CurrentSetores";
+import { AntDesign } from "@expo/vector-icons";
+import ConfirmableButton from "components/ConfirmableButton";
 
 function formData(data: String) {
   let formatada = data?.substr(0, 10).split("-").reverse().join("/");
   return formatada == "00/00/0000" ? " - " : formatada;
 }
 
-function alterStatus(user_id, inspection_id, status_inspection) {
-  if (status_inspection == 1) {
-    alterStatusInspectionById(user_id, inspection_id, 2);
-  }
-}
-
 const setores = () => {
   const local = useLocalSearchParams();
   const [lista, setLista] = useState([]);
   const [name, setName] = useState("");
+  const [ValidButton, setValidButton] = useState(false);
   const id = local.inspection_id;
   const loadData = async () => {
     if (id) {
       try {
         const res = await getSectorsByIdInspection(id);
         setLista(res.payload);
+        setValidButton(res.payload.allClosed);
       } catch (error) {
         console.error("Erro ao carregar dados:", error);
       }
@@ -53,15 +47,20 @@ const setores = () => {
       console.log("Carregando...");
     }
   };
-  useFocusEffect(
-    useCallback(() => {
-      loadData();
-      console.log(id);
-    }, [id])
-  );
+  useFocusEffect(() => {
+    loadData();
+  });
+
+  async function alterStatus() {
+    if (ValidButton) {
+      await alterStatusInspectionById(local.user_id, local.inspection_id, 3);
+      router.push({ pathname: "/(stack)/inspections/" + local.inspection_id });
+    }
+  }
 
   return (
     <BackgroundLayout>
+      <CurrentInspection />
       <HeaderTitlePages title="Setores" />
       <ScrollView>
         {lista.length !== 0 &&
@@ -87,15 +86,14 @@ const setores = () => {
                       user_id: local.user_id,
                     },
                   }}
-                  onPress={() => setInspectionName(e.fullSectorName)}
+                  // onPress={() => setInspectionName(e.fullSectorName)}
                   asChild
                 >
                   <Button
                     texto="Inspecionar"
                     active={e.is_closed === 0 ? true : false}
-                    // onPress={() => {
-                    //   alterStatus(e.user_id, e.inspection_id, e.status_inspection);
-                    // }}
+                    onPress={() => setSetoresName(e.fullSectorName)}
+                    asChild
                   />
                 </Link>
               </Card>
@@ -107,6 +105,21 @@ const setores = () => {
               </Text>
             </View>
           ))}
+        <View style={style.boxSpacefinish}>
+          <ConfirmableButton
+            buttonText="Finalizar Setores"
+            onConfirm={() => alterStatus}
+            color="#16be2e"
+            active={ValidButton}
+            modalProps={{
+              title: "Confirmação de Finalização",
+              message:
+                "Declaro que efetuei a conferência nos dados captados neste Check list, com a ciência que as informações aqui descritas refletem exatamente as condições reais inspecionadas e são de minha inteira responsabilidade.",
+              confirmText: "Confirmar",
+              cancelText: "Cancelar",
+            }}
+          />
+        </View>
       </ScrollView>
       <StatusBar style="dark" />
     </BackgroundLayout>
@@ -119,6 +132,9 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
+  },
+  boxSpacefinish: {
+    margin: 18,
   },
   image: {
     flex: 1,

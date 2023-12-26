@@ -119,6 +119,26 @@ export const saveInspectableIsClosed = async (
   }
 };
 
+export const saveSectorIsClosed = async (
+  sector_area_pavement_id: number,
+  inspectionId: number
+) => {
+  await setAuthToken();
+  try {
+    const requestBody = {
+      sector_area_pavement_id: sector_area_pavement_id,
+      inspection_id: inspectionId,
+    };
+    const response = await axiosInstance.post(
+      "/inspections/set_is_closed_sector",
+      requestBody
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Erro ao salvar inspecao como fechada");
+  }
+};
+
 export const register_maintenance = async (
   system_type_id: any,
   maintenance_type_id: any,
