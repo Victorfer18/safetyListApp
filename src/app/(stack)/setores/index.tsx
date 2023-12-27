@@ -72,8 +72,9 @@ const setores = () => {
                 </View>
                 <Link
                   href={{
-                    pathname: `/(stack)/${e.is_closed === 0 ? "tarefas" : "setores"
-                      }/`,
+                    pathname: `/(stack)/${
+                      e.is_closed === 0 ? "tarefas" : "setores"
+                    }/`,
                     params: {
                       client_id: local.client_id,
                       inspection_id: local.inspection_id,
@@ -116,12 +117,11 @@ const setores = () => {
           ))}
         <View style={style.boxSpacefinish}>
           <ConfirmableButton
-            buttonText="Finalizar Setores"
+            buttonText="Finalizar inspeção"
             onConfirm={() => alterStatus}
             color="#16be2e"
             active={ValidButton}
             modalProps={{
-              title: "Confirmação de Finalização",
               message:
                 "Declaro que efetuei a conferência nos dados captados neste Check list, com a ciência que as informações aqui descritas refletem exatamente as condições reais inspecionadas e são de minha inteira responsabilidade.",
               confirmText: "Confirmar",
