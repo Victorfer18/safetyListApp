@@ -20,7 +20,7 @@ import jwt from "@/services/jwt";
 import MessageDisplay from "@/components/feedBack";
 import CameraComponent from "@/components/Camera";
 
-function FormTarefa({ item, index }: any) {
+function FormTarefa({ item, index, setCheckButton }: any) {
   const local = useLocalSearchParams();
   const [photoUri, setPhotoUri] = useState(null);
   const [selectedRadio, setSelectedRadio] = useState(1);
@@ -88,7 +88,7 @@ function FormTarefa({ item, index }: any) {
         local.inspection_id,
         e.sys_app_maintenances_id
       );
-
+      setCheckButton(e.sys_app_maintenances_id)
       setTimeout(() => {
         setMessage(res.message);
         setMessageType("success");

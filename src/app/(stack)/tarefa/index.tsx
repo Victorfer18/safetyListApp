@@ -42,9 +42,24 @@ const App = ({ ...params }: any) => {
   const [ValidButton, setValidButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [checkButton, setCheckButton] = useState(0);
+
   const local = useLocalSearchParams();
 
   const windowHeight = Dimensions.get("window").height;
+
+  useEffect(() => {
+    (async () => {
+      const res = await get_maintenance(
+        local.system_type_id,
+        local.client_id,
+        local.sector_area_pavement_id,
+        local.inspection_id
+      );
+      setValidButton(res.payload.allClosed);
+
+    })();
+  }, [checkButton])
 
   useEffect(() => {
     (async () => {
@@ -56,9 +71,6 @@ const App = ({ ...params }: any) => {
         local.sector_area_pavement_id,
         local.inspection_id
       );
-      console.log("====================================");
-      console.log(res.payload.maintenances);
-      console.log("====================================");
       setLista(res.payload.maintenances);
       setValidButton(res.payload.allClosed);
       setResposta(res.payload.maintenances);
@@ -111,6 +123,7 @@ const App = ({ ...params }: any) => {
     <FormTarefa item={item} index={index} key={index} />
   );
 
+
   return isLoading ? (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" color="#0000ff" />
@@ -121,6 +134,7 @@ const App = ({ ...params }: any) => {
       <View style={{ flex: 1 }}>
         <CurrentInspection />
         <CurrentSetores />
+
         <KeyboardAwareScrollView extraScrollHeight={100}>
           <CurrentType />
           {lista.length === 0 ? (
@@ -132,7 +146,7 @@ const App = ({ ...params }: any) => {
           ) : (
             <>
               {lista.map((item, index) => (
-                <FormTarefa item={item} index={index} key={index} />
+                <FormTarefa item={item} index={index} key={index} setCheckButton={setCheckButton} />
               ))}
 
               <View style={{ margin: 16 }}>

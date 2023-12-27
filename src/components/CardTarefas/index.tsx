@@ -40,8 +40,14 @@ const CardTarefas = ({ style, lista }: any) => {
             <Text style={style.taskText}>{e.system_type_name}</Text>
           </TouchableOpacity>
         </Link>
+
+
+
       ))}
     </View>
+
+
+
   );
 };
 

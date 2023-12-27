@@ -85,17 +85,17 @@ const setores = () => {
                       user_id: local.user_id,
                     },
                   }}
-                  onPress={() => console.log({
-                    client_id: local.client_id,
-                    inspection_id: local.inspection_id,
-                    client_parent: local.client_parent,
-                    sector_area_pavement_id: e.sector_area_pavement_id,
-                    inspection_name: local.inspection_name,
-                    inspecao: id,
-                    status_inspection: local.status_inspection,
-                    user_id: local.user_id,
+                  // onPress={() => console.log({
+                  //   client_id: local.client_id,
+                  //   inspection_id: local.inspection_id,
+                  //   client_parent: local.client_parent,
+                  //   sector_area_pavement_id: e.sector_area_pavement_id,
+                  //   inspection_name: local.inspection_name,
+                  //   inspecao: id,
+                  //   status_inspection: local.status_inspection,
+                  //   user_id: local.user_id,
 
-                  })}
+                  // })}
                   asChild
                 >
                   <Button
