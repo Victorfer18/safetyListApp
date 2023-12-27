@@ -74,10 +74,16 @@ export const getSectorsByIdInspection = async (inspectionId: number) => {
 
 export const getInspectableList = async (
   inspection_id: number,
-  client_id: number
+  client_id: number,
+  sector_area_pavement_id: number
 ) => {
   await setAuthToken();
-  let seed = { fn: "getInspectableList", client_id, inspection_id };
+  let seed = {
+    fn: "getInspectableList",
+    client_id,
+    inspection_id,
+    sector_area_pavement_id,
+  };
   if (await isOff()) {
     return await loadData(seed);
   }
@@ -85,6 +91,7 @@ export const getInspectableList = async (
     const body = {
       inspection_id,
       client_id,
+      sector_area_pavement_id,
     };
     const response = await axiosInstance.post(
       "/inspections/getInspectableList",

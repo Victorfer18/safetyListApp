@@ -38,7 +38,8 @@ const tarefas = () => {
     try {
       const res = await getInspectableList(
         local.inspection_id,
-        local.client_id
+        local.client_id,
+        local.sector_area_pavement_id
       );
       setLista(res.payload.inspecTables);
       if (res.payload.allClosed) {
