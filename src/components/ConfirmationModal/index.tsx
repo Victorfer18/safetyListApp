@@ -72,6 +72,7 @@ const ConfirmationModal = ({
       runAnimation();
       return;
     }
+
     onConfirm();
   };
 

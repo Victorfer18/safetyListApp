@@ -118,7 +118,7 @@ const setores = () => {
         <View style={style.boxSpacefinish}>
           <ConfirmableButton
             buttonText="Finalizar inspeção"
-            onConfirm={() => alterStatus}
+            onConfirm={() => alterStatus()}
             color="#16be2e"
             active={ValidButton}
             modalProps={{
