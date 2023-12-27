@@ -107,7 +107,8 @@ export const getInspectableList = async (
 export const saveInspectableIsClosed = async (
   clientParent: number,
   inspectionId: number,
-  systemTypeId: number
+  systemTypeId: number,
+  sector_area_pavement_id: number
 ) => {
   await setAuthToken();
   try {
@@ -115,6 +116,7 @@ export const saveInspectableIsClosed = async (
       client_parent: clientParent,
       inspection_id: inspectionId,
       system_type_id: systemTypeId,
+      sector_area_pavement_id: sector_area_pavement_id,
     };
     const response = await axiosInstance.post(
       "/inspections/set_is_closed",

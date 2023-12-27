@@ -57,9 +57,8 @@ const App = ({ ...params }: any) => {
         local.inspection_id
       );
       setValidButton(res.payload.allClosed);
-
     })();
-  }, [checkButton])
+  }, [checkButton]);
 
   useEffect(() => {
     (async () => {
@@ -90,7 +89,8 @@ const App = ({ ...params }: any) => {
               saveInspectableIsClosed(
                 local.client_parent,
                 local.inspection_id,
-                local.system_type_id
+                local.system_type_id,
+                local.sector_area_pavement_id
               );
               router.push({
                 pathname: "/(stack)/tarefas/",
@@ -123,7 +123,6 @@ const App = ({ ...params }: any) => {
     <FormTarefa item={item} index={index} key={index} />
   );
 
-
   return isLoading ? (
     <View style={styles.loadingContainer}>
       <ActivityIndicator size="large" color="#0000ff" />
@@ -146,7 +145,12 @@ const App = ({ ...params }: any) => {
           ) : (
             <>
               {lista.map((item, index) => (
-                <FormTarefa item={item} index={index} key={index} setCheckButton={setCheckButton} />
+                <FormTarefa
+                  item={item}
+                  index={index}
+                  key={index}
+                  setCheckButton={setCheckButton}
+                />
               ))}
 
               <View style={{ margin: 16 }}>
