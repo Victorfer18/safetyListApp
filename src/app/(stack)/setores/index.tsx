@@ -22,11 +22,7 @@ import CurrentInspection from "@/components/CurrentInspection";
 import { setSetoresName } from "@/components/CurrentSetores";
 import { AntDesign } from "@expo/vector-icons";
 import ConfirmableButton from "components/ConfirmableButton";
-
-function formData(data: String) {
-  let formatada = data?.substr(0, 10).split("-").reverse().join("/");
-  return formatada == "00/00/0000" ? " - " : formatada;
-}
+import RefreshableScrollView from "@/components/RefreshableScrollView";
 
 const setores = () => {
   const local = useLocalSearchParams();
@@ -34,7 +30,7 @@ const setores = () => {
   const [name, setName] = useState("");
   const [ValidButton, setValidButton] = useState(false);
   const id = local.inspection_id;
-  const loadData = async () => {
+  const loadData = async (id: any) => {
     if (id) {
       try {
         const res = await getSectorsByIdInspection(id);
@@ -47,9 +43,9 @@ const setores = () => {
       console.log("Carregando...");
     }
   };
-  useFocusEffect(() => {
-    loadData();
-  });
+  useFocusEffect(useCallback(() => {
+    loadData(id);
+  }, [id]));
 
   async function alterStatus() {
     if (ValidButton) {
@@ -62,7 +58,7 @@ const setores = () => {
     <BackgroundLayout>
       <CurrentInspection />
       <HeaderTitlePages title="Setores" />
-      <ScrollView>
+      <RefreshableScrollView onRefresh={loadData}>
         {lista.length !== 0 &&
           (lista.sectors.length !== 0 ? (
             lista.sectors.map((e, i) => (
@@ -72,9 +68,8 @@ const setores = () => {
                 </View>
                 <Link
                   href={{
-                    pathname: `/(stack)/${
-                      e.is_closed === 0 ? "tarefas" : "setores"
-                    }/`,
+                    pathname: `/(stack)/${e.is_closed === 0 ? "tarefas" : "setores"
+                      }/`,
                     params: {
                       client_id: local.client_id,
                       inspection_id: local.inspection_id,
@@ -118,7 +113,7 @@ const setores = () => {
             }}
           />
         </View>
-      </ScrollView>
+      </RefreshableScrollView>
       <StatusBar style="dark" />
     </BackgroundLayout>
   );

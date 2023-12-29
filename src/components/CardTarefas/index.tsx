@@ -33,6 +33,7 @@ const CardTarefas = ({ style, lista }: any) => {
         >
           <TouchableOpacity
             style={e.is_closed == 1 ? styleDisable.desativo : style.task}
+            disabled={e.is_closed == 1}
           >
             <View style={style.itemContainer}>
               <Image style={style.icone} source={{ uri: e.system_type_icon }} />
@@ -40,14 +41,8 @@ const CardTarefas = ({ style, lista }: any) => {
             <Text style={style.taskText}>{e.system_type_name}</Text>
           </TouchableOpacity>
         </Link>
-
-
-
       ))}
     </View>
-
-
-
   );
 };
 

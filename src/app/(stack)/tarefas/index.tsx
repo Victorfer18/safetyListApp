@@ -24,6 +24,7 @@ import CurrentCompany from "@/components/CurrentInspection";
 import BackgroundLayout from "@/components/BackgroundLayout";
 import CurrentInspection from "@/components/CurrentInspection";
 import CurrentSetores from "@/components/CurrentSetores";
+import RefreshableScrollView from "@/components/RefreshableScrollView";
 
 const tarefas = () => {
   const local = useLocalSearchParams();
@@ -47,6 +48,18 @@ const tarefas = () => {
           local.sector_area_pavement_id,
           local.inspection_id
         );
+        router.push({
+          pathname: "/(stack)/setores/",
+          params: {
+            client_id: local.client_id,
+            inspection_id: local.inspection_id,
+            client_parent: local.client_parent,
+            user_id: local.user_id,
+            inspection_name: local.inspection_name,
+            status_inspection: parseInt(local.status_inspection),
+            inspecao: local.inspecao,
+          },
+        })
       }
     } catch (error) {
       console.error("Erro ao carregar a lista de tarefas:", error);
@@ -67,7 +80,7 @@ const tarefas = () => {
     </View>
   ) : (
     <BackgroundLayout>
-      <ScrollView>
+      <RefreshableScrollView onRefresh={loadData}>
         <CurrentInspection />
         <CurrentSetores />
         <HeaderTitlePages title="Sistemas" />
@@ -82,7 +95,7 @@ const tarefas = () => {
           )}
         </View>
         <StatusBar style="dark" />
-      </ScrollView>
+      </RefreshableScrollView>
     </BackgroundLayout>
   );
 };

@@ -17,6 +17,7 @@ import {
 import { Link } from "expo-router";
 import { setInspectionName } from "@/components/CurrentInspection";
 import BackgroundLayout from "@/components/BackgroundLayout";
+import RefreshableScrollView from "@/components/RefreshableScrollView";
 
 function formData(data: String) {
   let formatada = data?.substr(0, 10).split("-").reverse().join("/");
@@ -52,7 +53,7 @@ const inspections = () => {
       <View style={style.boxTituloPage}>
         <Text style={style.tituloPage}>Inspeções</Text>
       </View>
-      <ScrollView>
+      <RefreshableScrollView onRefresh={loadData}>
         {lista.map((e, i) => (
           <Card key={i}>
             <Text style={style.titulo}>{e.inspection_name}</Text>
@@ -105,7 +106,7 @@ const inspections = () => {
             </Text>
           </View>
         )}
-      </ScrollView>
+      </RefreshableScrollView>
       <StatusBar style="dark" />
     </BackgroundLayout>
   );
