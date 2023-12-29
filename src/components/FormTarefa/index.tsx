@@ -60,8 +60,9 @@ function FormTarefa({ item, index, setCheckButton }: any) {
     setLoad(true);
     if (
       !photoUri ||
-      inputValue1 == "" ||
-      (selectedRadio == 0 && inputValue2 == "")
+      inputValue1 == ""
+      // ||
+      // (selectedRadio == 0 && inputValue2 == "")
     ) {
       setTimeout(() => {
         setMessage("Preencha todos os campos");
@@ -88,7 +89,7 @@ function FormTarefa({ item, index, setCheckButton }: any) {
         local.inspection_id,
         e.sys_app_maintenances_id
       );
-      setCheckButton(e.sys_app_maintenances_id)
+      setCheckButton(e.sys_app_maintenances_id);
       setTimeout(() => {
         setMessage(res.message);
         setMessageType("success");
@@ -202,7 +203,7 @@ function FormTarefa({ item, index, setCheckButton }: any) {
             if (!item?.file_url) setInputValue1(text);
           }}
         />
-        {selectedRadio == 0 && (
+        {/* {selectedRadio == 0 && (
           <CustomInput
             placeholder="Ações a serem tomadas"
             value={inputValue2}
@@ -210,7 +211,7 @@ function FormTarefa({ item, index, setCheckButton }: any) {
               if (!item?.file_url) setInputValue2(text);
             }}
           />
-        )}
+        )} */}
         <StatusBar style="dark" />
       </View>
       <Button

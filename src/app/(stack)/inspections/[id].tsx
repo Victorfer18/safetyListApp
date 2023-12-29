@@ -30,6 +30,9 @@ const inspections = () => {
   const [name, setName] = useState("");
 
   const loadData = async () => {
+    console.log("====================================");
+    console.log("id", id);
+    console.log("====================================");
     if (id) {
       try {
         const res = await getInspectionsByClient(id);

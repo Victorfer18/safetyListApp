@@ -43,14 +43,16 @@ const setores = () => {
       console.log("Carregando...");
     }
   };
-  useFocusEffect(useCallback(() => {
-    loadData(id);
-  }, [id]));
+  useFocusEffect(
+    useCallback(() => {
+      loadData(id);
+    }, [id])
+  );
 
   async function alterStatus() {
     if (ValidButton) {
       await alterStatusInspectionById(local.user_id, local.inspection_id, 3);
-      router.push({ pathname: "/(stack)/inspections/" + local.inspection_id });
+      router.push({ pathname: "/(stack)/inspections/" + local.inspecao });
     }
   }
 
@@ -68,8 +70,9 @@ const setores = () => {
                 </View>
                 <Link
                   href={{
-                    pathname: `/(stack)/${e.is_closed === 0 ? "tarefas" : "setores"
-                      }/`,
+                    pathname: `/(stack)/${
+                      e.is_closed === 0 ? "tarefas" : "setores"
+                    }/`,
                     params: {
                       client_id: local.client_id,
                       inspection_id: local.inspection_id,
