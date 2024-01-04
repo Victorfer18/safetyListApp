@@ -10,7 +10,7 @@ import Button from '@/components/Button';
 import { router } from 'expo-router';
 import NetInfo from '@react-native-community/netinfo';
 
-const image = 'assets/images/login/background.png';
+const image = 'assets/images/login/background.jpg';
 const logoImage1 = 'assets/images/logo/safety-list.png';
 const logoImage2 = 'assets/images/logo/safety-2u.png';
 
