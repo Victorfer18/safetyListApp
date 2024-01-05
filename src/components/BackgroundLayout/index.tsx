@@ -2,7 +2,7 @@
 import React from 'react';
 import { ImageBackground, StyleSheet, SafeAreaView } from 'react-native';
 
-const image = 'assets/images/login/background.png';
+const image = 'assets/images/login/background.jpg';
 
 const BackgroundLayout = ({ children }) => {
     return (
