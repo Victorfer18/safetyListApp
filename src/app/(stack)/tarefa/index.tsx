@@ -104,11 +104,6 @@ const App = ({ ...params }: any) => {
                   user_id: local.user_id,
                 },
               });
-              console.log(
-                local.client_parent,
-                local.inspection_id,
-                local.system_type_id
-              );
             },
           },
         ],

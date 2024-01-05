@@ -242,14 +242,14 @@ export const alterStatusInspectionById = async (
   }
 };
 
-export const getClientsById = async (clientId: number) => {
+export const getClientsById = async () => {
   await setAuthToken();
-  let seed = { fn: "getClientsById", clientId };
+  let seed = { fn: "getClientsById" };
   if (await isOff()) {
     return await loadData(seed);
   }
   try {
-    const response = await axiosInstance.get(`/clients/${clientId}`);
+    const response = await axiosInstance.get(`/clients`);
     await saveData(seed, response.data);
     return response.data;
   } catch (error) {
@@ -299,18 +299,11 @@ const getErrorMessage = async (error) => {
   if (error.response) {
     const status = error.response.status;
     switch (status) {
-      case 400:
-        return "Requisição inválida. Por favor, verifique os dados enviados.";
-      case 401:
-        return "Não autorizado. Por favor, faça login novamente.";
-      case 403:
-        return "Acesso negado. Você não tem permissão para acessar este recurso.";
-      case 404:
-        return "Recurso não encontrado.";
       case 500:
         return "Erro interno do servidor.";
       default:
-        return "Ocorreu um erro desconhecido.";
+        return error.response.data.message;
+
     }
   } else if (error.request) {
     return "Não foi possível obter uma resposta do servidor.";
@@ -384,7 +377,7 @@ async function sincronizar() {
         dataPut.data = dataPut.data.filter(
           (i: any) => payload.imageUri != i.imageUri
         );
-      } catch (error) {}
+      } catch (error) { }
       await saveData({ list: true }, dataPut);
     });
   }

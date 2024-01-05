@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "safetylist_app",
-    "slug": "safetylist_app",
+    "name": "SafetyList",
+    "slug": "safety-list-app",
     "scheme": "safetylist-app",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,13 +16,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "backgroundColor": "#c62e21",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.safety2u.safetylist",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#c62e21"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.safety2u.safetylist",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -36,9 +45,15 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+          "cameraPermission": "Permitir acesso à câmera no $(PRODUCT_NAME)?"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "46c5d89b-601d-440f-99bc-d6f66983ceab"
+      }
+    },
+    "owner": "victorfer18"
   }
 }
