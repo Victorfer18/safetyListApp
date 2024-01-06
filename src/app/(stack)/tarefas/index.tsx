@@ -13,18 +13,18 @@ import {
   getInspectableList,
   saveInspectableIsClosed,
   saveSectorIsClosed,
-} from "services/api";
+} from "../../../services/api";
 import { router, useLocalSearchParams, useFocusEffect } from "expo-router";
-import CardTarefas from "@/components/CardTarefas";
+import CardTarefas from "../../../components/CardTarefas";
 
-import Button from "components/Button";
+import Button from "../../../components/Button";
 import { StatusBar } from "expo-status-bar";
-import HeaderTitlePages from "@/components/HeaderTitlePages";
-import CurrentCompany from "@/components/CurrentInspection";
-import BackgroundLayout from "@/components/BackgroundLayout";
-import CurrentInspection from "@/components/CurrentInspection";
-import CurrentSetores from "@/components/CurrentSetores";
-import RefreshableScrollView from "@/components/RefreshableScrollView";
+import HeaderTitlePages from "../../../components/HeaderTitlePages";
+import CurrentCompany from "../../../components/CurrentInspection";
+import BackgroundLayout from "../../../components/BackgroundLayout";
+import CurrentInspection from "../../../components/CurrentInspection";
+import CurrentSetores from "../../../components/CurrentSetores";
+import RefreshableScrollView from "../../../components/RefreshableScrollView";
 
 const tarefas = () => {
   const local = useLocalSearchParams();

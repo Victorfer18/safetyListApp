@@ -12,7 +12,7 @@ import { useEffect, useState, useCallback } from "react";
 import {
   alterStatusInspectionById,
   getSectorsByIdInspection,
-} from "services/api";
+} from "../../../services/api";
 import { Link } from "expo-router";
 
 import BackgroundLayout from "@/components/BackgroundLayout";
@@ -70,9 +70,8 @@ const setores = () => {
                 </View>
                 <Link
                   href={{
-                    pathname: `/(stack)/${
-                      e.is_closed === 0 ? "tarefas" : "setores"
-                    }/`,
+                    pathname: `/(stack)/${e.is_closed === 0 ? "tarefas" : "setores"
+                      }/`,
                     params: {
                       client_id: local.client_id,
                       inspection_id: local.inspection_id,

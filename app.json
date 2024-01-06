@@ -16,7 +16,7 @@
       "**/*"
     ],
     "ios": {
-      "backgroundColor": "#c62e21",
+      "backgroundColor": "#be1622",
       "supportsTablet": true,
       "bundleIdentifier": "com.safety2u.safetylist",
       "buildNumber": "2"
@@ -24,7 +24,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#c62e21"
+        "backgroundColor": "#be1622"
       },
       "permissions": [
         "android.permission.CAMERA",

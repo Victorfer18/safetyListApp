@@ -15,22 +15,22 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
-import Card from "@/components/Card";
+import Card from "../../../components/Card";
 import Button from "components/Button";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { get_maintenance, saveInspectableIsClosed } from "services/api";
-import CustomInput from "@/components/CustomInput";
-import jwt from "@/services/jwt";
-import FormTarefa from "@/components/FormTarefa";
-import MessageDisplay from "@/components/feedBack";
-import CurrentCompany from "@/components/CurrentInspection";
+import CustomInput from "../../../components/CustomInput";
+import jwt from "../../../services/jwt";
+import FormTarefa from "../../../components/FormTarefa";
+import MessageDisplay from "../../../components/feedBack";
+import CurrentCompany from "../../../components/CurrentInspection";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import BackgroundLayout from "@/components/BackgroundLayout";
-import CurrentType from "@/components/CurrentType";
-import CurrentInspection from "@/components/CurrentInspection";
-import CurrentSetores from "@/components/CurrentSetores";
+import BackgroundLayout from "../../../components/BackgroundLayout";
+import CurrentType from "../../../components/CurrentType";
+import CurrentInspection from "../../../components/CurrentInspection";
+import CurrentSetores from "../../../components/CurrentSetores";
 
 const App = ({ ...params }: any) => {
   const [lista, setLista] = useState([]);

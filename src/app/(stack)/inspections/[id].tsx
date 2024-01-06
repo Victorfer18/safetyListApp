@@ -5,19 +5,19 @@ import {
   ScrollView,
   ImageBackground,
 } from "react-native";
-import Button from "@/components/Button";
-import Card from "@/components/Card";
+import Button from "../../../components/Button";
+import Card from "../../../components/Card";
 import { StatusBar } from "expo-status-bar";
-import { useSearchParams, useFocusEffect } from "expo-router";
+import { useGlobalSearchParams, useFocusEffect } from "expo-router";
 import { useEffect, useState, useCallback } from "react";
 import {
   alterStatusInspectionById,
   getInspectionsByClient,
-} from "services/api";
+} from "../../../services/api";
 import { Link } from "expo-router";
-import { setInspectionName } from "@/components/CurrentInspection";
-import BackgroundLayout from "@/components/BackgroundLayout";
-import RefreshableScrollView from "@/components/RefreshableScrollView";
+import { setInspectionName } from "../../..//components/CurrentInspection";
+import BackgroundLayout from "../../../components/BackgroundLayout";
+import RefreshableScrollView from "../../../components/RefreshableScrollView";
 
 function formData(data: String) {
   let formatada = data?.substr(0, 10).split("-").reverse().join("/");
@@ -25,14 +25,11 @@ function formData(data: String) {
 }
 
 const inspections = () => {
-  const { id } = useSearchParams();
+  const { id } = useGlobalSearchParams();
   const [lista, setLista] = useState([]);
   const [name, setName] = useState("");
 
   const loadData = async () => {
-    console.log("====================================");
-    console.log("id", id);
-    console.log("====================================");
     if (id) {
       try {
         const res = await getInspectionsByClient(id);
